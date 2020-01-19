@@ -8,7 +8,9 @@
       </v-avatar>
         </v-col>
         <v-col lg="1">
-      <v-toolbar-title style="margin-top:8px">pepperfry</v-toolbar-title>
+      <v-toolbar-title style="margin-top:8px">
+        <router-link to="/">Pepperfry</router-link> 
+      </v-toolbar-title>
         </v-col>
         <v-col lg="6">
            <input type="text" id="input">
