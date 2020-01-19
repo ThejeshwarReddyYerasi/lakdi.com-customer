@@ -26,7 +26,8 @@
         <v-col v-for="(item,i) in recommendations"
           :key="i"
           lg="3"
-        >
+          @click="product(item.productId)"
+          >
           <div>
             <v-img :src="item.src"
               aspect-ratio="1"
@@ -83,21 +84,21 @@ export default {
           price:124
         },
         {
-          productId:123,
+          productId:124,
           productName:'name',
           src:'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
           ratings:3,
           price:124
         },
         {
-          productId:123,
+          productId:122,
           productName:'name',
           src:'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
           ratings:3,
           price:124
         },
         {
-          productId:123,
+          productId:1233,
           productName:'name',
           src:'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
           ratings:3,
@@ -109,6 +110,10 @@ export default {
   methods:{
     call(i){
       window.console.log(i);
+    },
+    product(productId){
+      // window.console.log(id);
+      this.$router.push({path:'/product',params:{productId}})
     }
   }
 }
