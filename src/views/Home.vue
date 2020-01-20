@@ -26,7 +26,7 @@
         <v-col v-for="(item,i) in recommendations"
           :key="i"
           lg="3"
-          @click="product(item.productId)"
+          @click="product(item.productId,item.merchantId)"
           >
           <div>
             <v-img :src="item.src"
@@ -37,8 +37,9 @@
            </v-img>
            <div style="text-align:center">
              <p>{{item.productName}}</p>
-             <p>{{item.price}}</p>
+             <p>price-{{item.price}}</p>
               <v-rating v-model="item.ratings"></v-rating>
+              <p>seller-{{item.merchantName}}</p>
            </div>
           </div>
         </v-col>
@@ -60,49 +61,57 @@ export default {
     return {
         items: [
           {
-            src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
+            src: 'https://ii2.pepperfry.com/media/wysiwyg/banners/04_1012020.jpg',
           },
           {
-            src: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg',
+            src: 'https://www.ulcdn.net/media/slideshow/newdelhi/RDS2020_slideshow-NCR.jpg?1579322422',
           },
           {
-            src: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg',
+            src: 'https://www.mobelhomestore.com/banner3v1_ver2.jpg',
           },
           {
-            src: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg',
+            src: 'https://i1.wp.com/reclinerlife.com/wp-content/uploads/2018/08/3pc-recliner-set-with-5-recliners-in-black-gl08-6538-116-dallas-color-black-213.jpg?resize=641%2C350&ssl=1',
           },
           {
-            src: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg',
+            src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTF5qoPxT8O5OOoIgS4iuXyy4ZeqBtVTiFAtQ8FiwBL6BCaMSPo&s',
           },
         ],
       recommendations:[
         {
           productId:123,
           productName:'name',
-          src:'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
+          src:'https://ii3.pepperfry.com/media/wysiwyg/banners/01_wmyhah_web_06012020.jpg',
           ratings:3,
-          price:124
+          price:124,
+          merchantName: 'abc',
+          merchantId: 12424
         },
         {
           productId:124,
           productName:'name',
-          src:'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
+          src:'https://ii2.pepperfry.com/media/wysiwyg/banners/02_fc_web_06012020.jpg',
           ratings:3,
-          price:124
+          price:124,
+          merchantName: 'abc',
+          merchantId: 12444
         },
         {
           productId:122,
           productName:'name',
-          src:'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
+          src:'https://ii2.pepperfry.com/media/wysiwyg/banners/03_wpif__wap_06012020_new16.jpg',
           ratings:3,
-          price:124
+          price:124,
+          merchantName: 'abc',
+          merchantId: 12446
         },
         {
           productId:1233,
           productName:'name',
-          src:'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
+          src:'https://ii1.pepperfry.com/media/wysiwyg/banners/05_wpif_web_06012020.jpg',
           ratings:3,
-          price:124
+          price:124,
+          merchantName: 'abc',
+          merchantId: 124
         },
       ]
     }
@@ -111,9 +120,10 @@ export default {
     call(i){
       window.console.log(i);
     },
-    product(productId){
-      // window.console.log(id);
-      this.$router.push({path:'/product',params:{productId}})
+    product(productId,merchantId){
+      // window.console.log(productId,merchantId)
+      // this.$router.push({path:'/product/'+productId})
+      this.$router.push({path:`/product/${productId}/${merchantId}`})
     }
   }
 }

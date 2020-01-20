@@ -44,19 +44,19 @@
           Shop By Category
         </v-col>
         <v-col lg="1">
-          <v-btn text >Sofas</v-btn>
+          <v-btn text  @click="productList('sofa')">Sofas</v-btn>
         </v-col>
         <v-col lg="1">
-          <v-btn text>Recliners</v-btn>
+          <v-btn text @click="productList('recliner')">Recliners</v-btn>
         </v-col>
         <v-col lg="1">
-          <v-btn text>Tables</v-btn>
+          <v-btn text @click="productList('table')">Tables</v-btn>
         </v-col>
         <v-col lg="1">
-          <v-btn text>Wardrobe</v-btn>
+          <v-btn text @click="productList('wradrobe')">Wardrobe</v-btn>
         </v-col>
         <v-col lg="1">
-          <v-btn text>Chairs</v-btn>
+          <v-btn text @click="productList('mattress')">Mattress</v-btn>
         </v-col>
         <v-col lg="1"></v-col>
         <v-col lg="1"></v-col>
@@ -70,6 +70,12 @@
     data: () => ({
       
     }),
+    methods: {
+      productList(category){
+        this.$router.push({path:'/productList',query:{category:category}})
+        this.$store.dispatch('updateCategory',category)
+      }
+    }
   }
 </script>
 <style scoped>
