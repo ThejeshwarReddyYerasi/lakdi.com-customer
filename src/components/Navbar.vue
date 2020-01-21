@@ -9,21 +9,21 @@
         </v-col>
         <v-col lg="1">
       <v-toolbar-title style="margin-top:8px">
-        <router-link to="/">Pepperfry</router-link> 
+        <router-link to="/">Lakdi.Com</router-link> 
       </v-toolbar-title>
         </v-col>
         <v-col lg="6">
-           <input type="text" id="input">
+           <input type="text" id="input" v-model="searchString">
         </v-col>
         <v-col lg="1">
-          <v-btn icon>
+          <v-btn icon @click="search">
             <v-icon large>
               search
             </v-icon>
           </v-btn>
         </v-col>
         <v-col lg="1">
-          <v-btn icon>
+          <v-btn icon @click="cart">
             <v-icon large>add_shopping_cart</v-icon>
           </v-btn>
         </v-col>
@@ -68,12 +68,26 @@
 <script>
   export default {
     data: () => ({
-      
+      searchString:''
     }),
     methods: {
       productList(category){
         this.$router.push({path:'/productList',query:{category:category}})
         this.$store.dispatch('updateCategory',category)
+      },
+      cart(){
+        this.$router.push({path:'/cart'})
+      },
+      search(){
+        this.$router.push({path:'/search'})
+        this.$store.dispatch('search',this.searchString);
+      },
+    },
+    watch:{
+      searchString: function(){
+        if(this.searchString==''){
+          this.$router.push({path:'/'})
+        }
       }
     }
   }

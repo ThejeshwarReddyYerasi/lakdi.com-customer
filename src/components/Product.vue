@@ -38,15 +38,10 @@
                     </v-col>
                 </v-row>
                 <v-row>
-                    <v-col class="d-flex" cols="12" sm="6">
-                        <v-select
-                            :items="it"
-                            label="Outlined style"
-                            dense
-                            outlined
-                        ></v-select>
+                    <v-col class="d-flex" cols="12" sm="6" style="text-align:right">
+                        <input type="number" id="orderInput" min="1" value="1" v-model="quantity">
                     </v-col>
-                    <v-col>
+                    <v-col style="margin-left:20px">
                         <v-btn color="#E75A34" @click="addToCart"><span style="color:white">Add To Cart</span></v-btn>
                     </v-col>
                 </v-row>
@@ -58,7 +53,7 @@
     export default{
         data: function(){
            return{
-             it: ['Foo', 'Bar', 'Fizz', 'Buzz'],
+             quantity:1,
              productDetails:{
                productName:'product name',
                productId: '',
@@ -99,7 +94,7 @@
         methods:{
             addToCart(){
                 window.console.log("cart")  // send data to back end
-                //quantity,productId,merchantId,customerId
+                //quantity,productId,merchantId,customerId and set quantity back to 1
             }
         },
         created(){
@@ -117,6 +112,12 @@
        border:1px solid black;
        height: 40px;
        width: 60px;
+       text-align: center
+   }
+   #orderInput{
+       height:40px;
+       width: 40px;
+       border: 0.8px solid black;
        text-align: center
    }
 </style>

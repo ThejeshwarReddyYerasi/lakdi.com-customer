@@ -11,7 +11,6 @@
                       max-width="250"
                       :contain="true"
                     >
-
                     </v-img>
                     <div >
                         <p>{{item.productName}}</p>
