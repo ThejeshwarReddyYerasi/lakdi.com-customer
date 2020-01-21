@@ -26,14 +26,15 @@
         <v-col v-for="(item,i) in recommendations"
           :key="i"
           lg="3"
-          @click="product(item.productId,item.merchantId)"
+          @click="product(item.productId)"
           >
           <div>
             <v-img :src="item.src"
               aspect-ratio="1"
               class="grey lighten-2"
                max-width="350"
-               max-height="250">
+               max-height="250"
+               :content="true">
            </v-img>
            <div style="text-align:center">
              <p>{{item.productName}}</p>
@@ -50,13 +51,7 @@
 </template>
 
 <script>
-// @ is an alias to /src
-// import HelloWorld from '@/components/HelloWorld.vue'
-
 export default {
-  components: {
-    // HelloWorld
-  },
   data: function(){
     return {
         items: [
@@ -83,8 +78,6 @@ export default {
           src:'https://ii3.pepperfry.com/media/wysiwyg/banners/01_wmyhah_web_06012020.jpg',
           ratings:3,
           price:124,
-          merchantName: 'abc',
-          merchantId: 12424
         },
         {
           productId:124,
@@ -92,8 +85,6 @@ export default {
           src:'https://ii2.pepperfry.com/media/wysiwyg/banners/02_fc_web_06012020.jpg',
           ratings:3,
           price:124,
-          merchantName: 'abc',
-          merchantId: 12444
         },
         {
           productId:122,
@@ -101,8 +92,6 @@ export default {
           src:'https://ii2.pepperfry.com/media/wysiwyg/banners/03_wpif__wap_06012020_new16.jpg',
           ratings:3,
           price:124,
-          merchantName: 'abc',
-          merchantId: 12446
         },
         {
           productId:1233,
@@ -110,8 +99,6 @@ export default {
           src:'https://ii1.pepperfry.com/media/wysiwyg/banners/05_wpif_web_06012020.jpg',
           ratings:3,
           price:124,
-          merchantName: 'abc',
-          merchantId: 124
         },
       ]
     }
@@ -120,11 +107,12 @@ export default {
     call(i){
       window.console.log(i);
     },
-    product(productId,merchantId){
-      // window.console.log(productId,merchantId)
-      // this.$router.push({path:'/product/'+productId})
-      this.$router.push({path:`/product/${productId}/${merchantId}`})
+    product(productId){
+      this.$router.push({path:`/product/${productId}`})
     }
+  },
+  created(){
+    // axios.get()
   }
 }
 </script>

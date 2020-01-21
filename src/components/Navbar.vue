@@ -16,10 +16,12 @@
            <input type="text" id="input" v-model="searchString">
         </v-col>
         <v-col lg="1">
-          <v-btn icon @click="search">
-            <v-icon large>
+          <v-btn icon @click="search" :disabled="searchString==''">
+            <!-- <router-link :to="`/search/${searchString}`"> -->
+              <v-icon large>
               search
-            </v-icon>
+              </v-icon>
+            <!-- </router-link> -->
           </v-btn>
         </v-col>
         <v-col lg="1">
@@ -72,24 +74,21 @@
     }),
     methods: {
       productList(category){
+        if(this.$route.query.category!=category){
         this.$router.push({path:'/productList',query:{category:category}})
         this.$store.dispatch('updateCategory',category)
+        }
       },
       cart(){
         this.$router.push({path:'/cart'})
       },
       search(){
-        this.$router.push({path:'/search'})
-        this.$store.dispatch('search',this.searchString);
+      if(this.$route.query.searchString!=this.searchString){
+          this.$router.push({path:'/search',query:{searchString:this.searchString}});
+          this.$store.dispatch('search',this.searchString);
+          }
       },
     },
-    watch:{
-      searchString: function(){
-        if(this.searchString==''){
-          this.$router.push({path:'/'})
-        }
-      }
-    }
   }
 </script>
 <style scoped>
