@@ -8,7 +8,7 @@
         <v-row align="center">
             <v-col lg="6" class="center">
                 <v-img style="margin:auto"
-                :src="productDetails.image"
+                :src="productDetails.imageUrl"
                 max-height="500"
                 max-width="450"
                 >
@@ -18,23 +18,28 @@
             <v-col lg="6">
                 <v-row>
                     <v-col lg="6">
-                        <p>Price: <span>{{productDetails.price}}</span></p>
+                        <p>Price: <span>{{productDetails.productPrice}}</span></p>
                         <p>Details:</p>
-                        <p>Brand: <span>{{productDetails.brand}}</span></p>
-                        <p>Material: <span>{{productDetails.material}}</span></p>
-                        <p>Color: <span>{{productDetails.color}}</span></p>
-                        <p>Description: <span>{{productDetails.description}}</span></p>
+                        <p>Description: <span>{{productDetails.productDescription}}</span></p>
                         <p>Rating: <v-rating v-model="productDetails.productRating"></v-rating></p>
-                        <p v-for="(value,name) in productDetails.attributes" :key="name">
+                        <p v-for="(value,name) in productDetails.productAttributes" :key="name">
                             {{name}}:{{value}}
                         </p>
                     </v-col>
                     <v-col lg="6">
-                        By Other Sellers:
-                        <div v-for="(item,i) in productDetails.otherMerchants" :key="i">
-                            <p>merchant name: <span>{{item.merchantName}}</span></p>
-                            <p>price: <span>{{item.price}}</span></p>
-                        </div>
+                        Sellers:
+                        <v-row v-for="(item,n) in productDetails.merchantList" :key="n">
+                            <v-col lg="2">
+                                <input type="radio" name="merchant" :value="item.merchantId" v-model="radioGroup"
+                                  id="stylingRadio"
+                                >
+                            </v-col>
+                            <v-col>
+                                <p>{{item.merchantName}}</p>
+                                <p>{{item.productPrice}}</p>
+                            </v-col>
+                        </v-row>
+                        {{radioGroup}}
                     </v-col>
                 </v-row>
                 <v-row>
@@ -42,7 +47,8 @@
                         <input type="number" id="orderInput" min="1" value="1" v-model="quantity">
                     </v-col>
                     <v-col style="margin-left:20px">
-                        <v-btn color="#E75A34" @click="addToCart"><span style="color:white">Add To Cart</span></v-btn>
+                        <v-btn color="#E75A34" @click="addToCart"><span style="color:white" 
+                         :disabled="radioGroup">Add To Cart</span></v-btn>
                     </v-col>
                 </v-row>
             </v-col>
@@ -50,58 +56,60 @@
     </div>
 </template>
 <script>
+import axios from 'axios'
     export default{
         data: function(){
            return{
+             radioGroup: null,
              quantity:1,
-             productDetails:{
-               productName:'product name',
-               productId: '',
-               merchantName: 'merchant name',
-               merchantId: '',
-               price:1123,
-               description:'description',
-               image:'https://ii1.pepperfry.com/media/catalog/product/y/u/494x544/yukio-4-door-wardrobe-in-walnut-finish-by-mintwud-yukio-4-door-wardrobe-in-walnut-finish-by-mintwud-4znggr.jpg',
-               attributes:{
-                   attribute1: 'gh',
-                   attribute2: 'ftyughi',
-                   attribute3: 'tfyguhij'
-               },
-               brand:'godrej',
-               material:'leather',
-               color: 'red',
-               productRating:3,
-               otherMerchants:[
-                  {
-                      merchantName:'merchant name',
-                      merchantId: 123,
-                      price: 1234
-                  },
-                  {
-                      merchantName:'merchant name',
-                      merchantId: 123,
-                      price: 1234
-                  },
-                  {
-                      merchantName:'merchant name',
-                      merchantId: 123,
-                      price: 1234
-                  } 
-               ]
-             }
+             productDetails: {}
+            // productDetails:{
+            //    productName:'productName',
+            //    productId: 123,
+            //    productPrice:1123,
+            //    productDescription:'description',
+            //   imageUrl:'https://ii1.pepperfry.com/media/catalog/product/y/u/494x544/yukio-4-door-wardrobe-in-walnut-finish-by-mintwud-yukio-4-door-wardrobe-in-walnut-finish-by-mintwud-4znggr.jpg',
+            //    productAttributes:{
+            //        attribute1: 'gh',
+            //        attribute2: 'ftyughi',
+            //        attribute3: 'tfyguhij'
+            //    },
+            //    productRating:3,
+            //    merchantList:[
+            //       {
+            //           merchantName:'merchant name',
+            //           merchantId: 1273,
+            //           productPrice: 1234
+            //       },
+            //       {
+            //           merchantName:'merchant name',
+            //           merchantId: 123,
+            //           productPrice: 1234
+            //       }
+            //    ]
+            //  }
            }
         },
         methods:{
             addToCart(){
-                window.console.log("cart")  // send data to back end
+                window.console.log("cart")
                 //quantity,productId,merchantId,customerId and set quantity back to 1
             }
         },
         created(){
-            //get the request form backend
-            this.productDetails.productId = this.$route.params.productId,
-            this.productDetails.merchantId = this.$route.params.merchantId
-        }
+            let that = this;
+            // this.productDetails.productId = this.$route.params.productId;
+            axios.get('https://1b17cfc0-f477-4711-9773-a7a9339d2ff2.mock.pstmn.io/client/product',{
+                params:{
+                    productId: 123
+                }
+            }).then(function(response){
+                window.console.log(response.data)
+                that.productDetails = response.data
+            }).catch(function(err){
+                window.console.log(err);
+            })
+        },
     }
 </script>
 <style scoped>

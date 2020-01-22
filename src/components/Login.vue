@@ -1,19 +1,52 @@
 <template>
-    <div style="width:400px">
-        <div style="margin:auto">
-            <div>
+    <div>
+        <v-card id="outerDiv" v-if="temporary" elevation="4">
+            <div style="text-align:center;margin-top:10px;color:grey;font-size:24px;font-family:cursive">
+                <p>
+                    <b>Sign In With</b>
+                </p>
+            </div>
+            <div class="inner">
+                <v-row> 
+                    <v-col lg="6">
+                        <v-btn @click="googleAuth" color="#DB4437" style="color:white">
+                            <v-icon style="padding-right:7px">fab fa-google</v-icon>
+                            Google</v-btn>
+                    </v-col>
+                    <v-col lg="6">
+                        <v-btn @click="facebookAuth" color="#4267B2" style="color:white">
+                           <v-icon style="padding-right:5px">fab fa-facebook </v-icon> 
+                            facebook</v-btn>
+                    </v-col>
+                </v-row>
+            </div>
+            <div class="inner">
                 <p>email</p><input type="text" class="input" v-model="email">
             </div>
-            <div>
+            <div class="inner">
+                <p>password</p><input type="password" class="input" v-model="password">
+            </div>
+            <div class="inner">
+                <v-btn @click="login(email,password)" style="width:100%;color:white" color="#212121">sign in</v-btn>
+            </div>
+            <div class="inner">
+                <v-btn @click="invert">{{temporaryVariable}}</v-btn> 
+            </div>
+        </v-card>
+        <v-card v-else id="outerDiv">
+            <div class="inner">
+                <p>email</p><input type="text" class="input" v-model="email">
+            </div>
+            <div class="inner">
                 <p>password</p><input type="password" class="input" v-model="password">
             </div>
             <div>
-                <v-btn @click="googleAuth">Google</v-btn>
-                <v-btn @click="facebookAuth">facebook</v-btn>
                 <v-btn @click="manualSignIn(email,password)">signup</v-btn>
-                <v-btn @click="login(email,password)">login</v-btn>
             </div>
-        </div>
+            <div>
+                <v-btn @click="invert">login</v-btn>
+            </div>
+        </v-card>
     </div>
 </template>
 <script>
@@ -22,13 +55,17 @@ import { googleProvider, facebookProvider, auth } from "../firebaseConfig";
         data: function(){
             return {
                 email:'',
-                password: ''
+                password: '',
                 // manualLogIn(email,password){
-
+                temporary:true,
+                temporaryVariable: 'Create Account'
                 // }
             }
         },
         methods:{
+            invert(){
+                this.temporary = !this.temporary;
+            },
             googleAuth(){
                 auth.signInWithPopup(googleProvider)
                 .then(function(result){
@@ -83,8 +120,21 @@ import { googleProvider, facebookProvider, auth } from "../firebaseConfig";
 <style scoped>
 .input{
        height:30px;
-       width: 300px;
+       width: 100%;
        border: 0.8px solid black;
+       background-color: azure;
        text-align: center
    }
+#outerDiv{
+    margin:auto;
+    width:400px;
+    border: 0.8px solid black;
+    margin-top: 10%;
+}
+.inner{
+    margin:auto;
+    width:300px;
+    margin-top:20px;
+    margin-bottom: 20px;
+}
 </style>
