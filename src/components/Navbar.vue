@@ -1,31 +1,43 @@
 <template>
   <v-card>
     <v-toolbar flat>
-      <v-row>
+      <v-row style="margin-top:10px;margin-bottom:10px">
         <v-col lg="1"></v-col>
+        <!-- <v-col lg="1"></v-col> -->
         <v-col lg="1">
-      <v-toolbar-title style="margin-top:8px">
-        <router-link to="/"><p><span id="logo">Lakdi.Com</span></p></router-link> 
-      </v-toolbar-title>
+          <v-toolbar-title>
+            <router-link to="/">
+                <v-img src="../assets/logo.png"></v-img>
+            </router-link> 
+          </v-toolbar-title>
         </v-col>
-        <v-col lg="6">
+        <!-- <v-col lg="1"></v-col> -->
+        <v-col lg="6" style="margin-left:3%">
            <input type="text" id="input" v-model="searchString">
         </v-col>
-        <v-col lg="1">
+        <v-col>
           <v-btn icon @click="search" :disabled="searchString==''">
               <v-icon large>
               search
               </v-icon>
           </v-btn>
         </v-col>
-        <v-col lg="1">
-          <v-btn icon @click="cart">
-            <v-icon large>add_shopping_cart</v-icon>
-          </v-btn>
-        </v-col>
-        <v-col lg="1">order</v-col>
-        <v-col lg="1" >
-          <v-btn text>profile</v-btn>
+        <v-col lg="3">
+          <div style="text-align:right">
+            <v-btn icon @click="cart" class="headerButtons">
+             <v-icon x-large>add_shopping_cart</v-icon>
+            </v-btn>
+            <v-btn icon class="headerButtons">
+             <v-icon large>
+              fas fa-truck
+             </v-icon>
+            </v-btn>
+            <v-btn icon class="headerButtons">
+             <v-icon  x-large>
+              account_circle
+             </v-icon>
+            </v-btn>
+          </div>
         </v-col>
       </v-row>
     </v-toolbar>
@@ -35,9 +47,11 @@
         <v-col lg="1">
           Shop By Category
         </v-col>
-        <v-col lg="1" v-for="(item,n) in getCategoriesListObject.data" :key="n">
-          <v-btn text  @click="productList(item.categoryId)">{{item.categoryName}}</v-btn>
-        </v-col>
+        <v-row style="margin:auto">
+            <v-col v-for="(item,n) in getCategoriesListObject.data" :key="n">
+              <v-btn text  @click="productList(item.categoryId)">{{item.categoryName}}</v-btn>
+            </v-col>
+        </v-row>
       </v-row>
     </v-system-bar>
   </v-card>
@@ -82,7 +96,13 @@
   width:100%;
   margin-top:8px 
 }
-.logo{
-  text-decoration: none
+#logo{
+  font-size: 20px;
+}
+a {
+  text-decoration: none;
+}
+.headerButtons{
+  margin-right: 25px
 }
 </style>
