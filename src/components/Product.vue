@@ -43,7 +43,12 @@
                 </v-row>
                 <v-row>
                     <v-col class="d-flex" cols="12" sm="6" style="text-align:right">
-                        <!-- <input type="number" id="orderInput" min="1" value="1" v-model="quantity"> -->
+                        <select class="classic">
+                            <option v-for="(item,n) in items" 
+                            :key="n">
+                                <div>{{item}}</div>
+                            </option>
+                        </select>
                     </v-col>
                     <v-col style="margin-left:20px">
                         <v-btn color="#E75A34" @click="addToCart"><span style="color:white" 
@@ -61,7 +66,8 @@ import axios from 'axios'
            return{
              radioGroup: null,
              quantity:1,
-             productDetails: {}
+             productDetails: {},
+             items: ['1','2','3','4','5','6','7','8','9','10'],
            }
         },
         methods:{
@@ -108,4 +114,29 @@ import axios from 'axios'
        border: 0.8px solid black;
        text-align: center
    }
+   select {
+  /* styling */
+  background-color: white;
+  border: thin solid black;
+  border-radius: 4px;
+  display: inline;
+  line-height: 1.5em;
+  padding: 0.5em 3em 0.5em 0.5em;
+  margin-top: 10px;
+}
+select.classic {
+  background-image:
+    linear-gradient(45deg, transparent 50%, black 50%),
+    linear-gradient(135deg, grey 50%, transparent 50%),
+    linear-gradient(to right, lightgrey, lightgrey);
+  background-position:
+    calc(100% - 20px) calc(1em + 2px),
+    calc(100% - 15px) calc(1em + 2px),
+    100% 0;
+  background-size:
+    5px 5px,
+    5px 5px,
+    2.5em 2.5em;
+  background-repeat: no-repeat;
+}
 </style>
