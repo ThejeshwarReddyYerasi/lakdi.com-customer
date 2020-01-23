@@ -1,34 +1,33 @@
 <template>
     <div>
-        <v-row>
+        <v-row v-if="check">
             <v-col style="background-color:#F5F5F5;text-align:center">
-                {{productDetails.productName}}
+                {{productDetails.data.product.productName}}
             </v-col>
         </v-row>
-        <v-row align="center">
+        <v-row align="center" v-if="check">
             <v-col lg="6" class="center">
                 <v-img style="margin:auto"
-                :src="productDetails.imageUrl"
+                :src="productDetails.data.product.imageUrl"
                 max-height="500"
                 max-width="450"
-                >
-                   
+                >         
                 </v-img>
             </v-col>
             <v-col lg="6">
                 <v-row>
                     <v-col lg="6">
-                        <p>Price: <span>{{productDetails.productPrice}}</span></p>
+                        <p>Price: <span>{{productDetails.data.product.productPrice}}</span></p>
                         <p>Details:</p>
-                        <p>Description: <span>{{productDetails.productDescription}}</span></p>
-                        <p>Rating: <v-rating v-model="productDetails.productRating"></v-rating></p>
-                        <p v-for="(value,name) in productDetails.productAttributes" :key="name">
+                        <p>Description: <span>{{productDetails.data.product.productDescription}}</span></p>
+                        <p>Rating: <v-rating v-model="productDetails.data.product.productRating"></v-rating></p>
+                        <p v-for="(value,name) in productDetails.data.product.productAttributes" :key="name">
                             {{name}}:{{value}}
                         </p>
                     </v-col>
-                    <v-col lg="6">
+                    <v-col lg="6" v-if="productDetails.data.merchantList">
                         Sellers:
-                        <v-row v-for="(item,n) in productDetails.merchantList" :key="n">
+                        <v-row v-for="(item,n) in productDetails.data.merchantList" :key="n">
                             <v-col lg="2">
                                 <input type="radio" name="merchant" :value="item.merchantId" v-model="radioGroup"
                                   id="stylingRadio"
@@ -44,7 +43,7 @@
                 </v-row>
                 <v-row>
                     <v-col class="d-flex" cols="12" sm="6" style="text-align:right">
-                        <input type="number" id="orderInput" min="1" value="1" v-model="quantity">
+                        <!-- <input type="number" id="orderInput" min="1" value="1" v-model="quantity"> -->
                     </v-col>
                     <v-col style="margin-left:20px">
                         <v-btn color="#E75A34" @click="addToCart"><span style="color:white" 
@@ -63,31 +62,6 @@ import axios from 'axios'
              radioGroup: null,
              quantity:1,
              productDetails: {}
-            // productDetails:{
-            //    productName:'productName',
-            //    productId: 123,
-            //    productPrice:1123,
-            //    productDescription:'description',
-            //   imageUrl:'https://ii1.pepperfry.com/media/catalog/product/y/u/494x544/yukio-4-door-wardrobe-in-walnut-finish-by-mintwud-yukio-4-door-wardrobe-in-walnut-finish-by-mintwud-4znggr.jpg',
-            //    productAttributes:{
-            //        attribute1: 'gh',
-            //        attribute2: 'ftyughi',
-            //        attribute3: 'tfyguhij'
-            //    },
-            //    productRating:3,
-            //    merchantList:[
-            //       {
-            //           merchantName:'merchant name',
-            //           merchantId: 1273,
-            //           productPrice: 1234
-            //       },
-            //       {
-            //           merchantName:'merchant name',
-            //           merchantId: 123,
-            //           productPrice: 1234
-            //       }
-            //    ]
-            //  }
            }
         },
         methods:{
@@ -98,18 +72,24 @@ import axios from 'axios'
         },
         created(){
             let that = this;
-            // this.productDetails.productId = this.$route.params.productId;
-            axios.get('https://1b17cfc0-f477-4711-9773-a7a9339d2ff2.mock.pstmn.io/client/product',{
-                params:{
-                    productId: 123
-                }
-            }).then(function(response){
+            axios.get(`http://10.177.68.26:8080/product/getProductDetails/${this.$route.params.productId}`)
+            .then(function(response){
                 window.console.log(response.data)
                 that.productDetails = response.data
             }).catch(function(err){
                 window.console.log(err);
             })
         },
+        computed:{
+            check(){
+                if(Object.keys(this.productDetails)<1){
+                return false;
+                }
+                else{
+                    return true
+                }
+            }
+        }
     }
 </script>
 <style scoped>
