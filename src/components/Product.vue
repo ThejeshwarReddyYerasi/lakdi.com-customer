@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-row v-if="check">
-            <v-col style="background-color:#F5F5F5;text-align:center">
+            <v-col style="background-color:#F5F5F5;text-align:center;margin-top:25px;margin-bottom:25px">
                 {{productDetails.data.product.productName}}
             </v-col>
         </v-row>
@@ -17,11 +17,12 @@
             <v-col lg="6">
                 <v-row>
                     <v-col lg="6">
-                        <p>Price: <span>{{productDetails.data.product.productPrice}}</span></p>
-                        <p>Details:</p>
-                        <p>Description: <span>{{productDetails.data.product.productDescription}}</span></p>
-                        <p>Rating: <v-rating v-model="productDetails.data.product.productRating"></v-rating></p>
-                        <p v-for="(value,name) in productDetails.data.product.productAttributes" :key="name">
+                        <p class="textOfCard">Price: <span>{{productDetails.data.product.productPrice}}</span></p>
+                        <p class="textOfCard">Details:</p>
+                        <p class="textOfCard">Description: <span>{{productDetails.data.product.productDescription}}</span></p>
+                        <p class="textOfCard">Rating: <v-rating v-model="productDetails.data.product.productRating"></v-rating></p>
+                        <p v-for="(value,name) in productDetails.data.product.productAttributes" :key="name"
+                        class="textOfCard">
                             {{name}}:{{value}}
                         </p>
                     </v-col>
@@ -41,8 +42,13 @@
                         {{radioGroup}}
                     </v-col>
                 </v-row>
-                <v-row>
-                    <v-col class="d-flex" cols="12" sm="6" style="text-align:right">
+                <v-row style="margin-top:15px">
+                    <v-col lg="2">
+                        <p class="textOfCard">
+                            Select Quantity:
+                        </p>
+                    </v-col>
+                    <v-col>
                         <select class="classic">
                             <option v-for="(item,n) in items" 
                             :key="n">
@@ -50,11 +56,15 @@
                             </option>
                         </select>
                     </v-col>
-                    <v-col style="margin-left:20px">
-                        <v-btn color="#E75A34" @click="addToCart"><span style="color:white" 
-                         :disabled="radioGroup">Add To Cart</span></v-btn>
-                    </v-col>
                 </v-row>
+            </v-col>
+        </v-row>
+        <v-row>
+            <v-row lg="10"></v-row>
+            <v-col lg="2">
+                <v-btn :disabled="radioGroup==''" color="#E75A34" @click="addToCart">
+                        <span style="color:white" >Add To Cart</span>
+                </v-btn>
             </v-col>
         </v-row>
     </div>
@@ -64,7 +74,7 @@ import axios from 'axios'
     export default{
         data: function(){
            return{
-             radioGroup: null,
+             radioGroup: '',
              quantity:1,
              productDetails: {},
              items: ['1','2','3','4','5','6','7','8','9','10'],
@@ -122,7 +132,7 @@ import axios from 'axios'
   display: inline;
   line-height: 1.5em;
   padding: 0.5em 3em 0.5em 0.5em;
-  margin-top: 10px;
+  /* margin-top: 10px; */
 }
 select.classic {
   background-image:
@@ -138,5 +148,8 @@ select.classic {
     5px 5px,
     2.5em 2.5em;
   background-repeat: no-repeat;
+}
+.textOfCard{
+    padding: 5px
 }
 </style>
