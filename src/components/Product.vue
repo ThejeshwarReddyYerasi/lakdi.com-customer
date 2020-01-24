@@ -30,7 +30,7 @@
                         Sellers:
                         <v-row v-for="(item,n) in productDetails.data.merchantList" :key="n">
                             <v-col lg="2">
-                                <input type="radio" name="merchant" :value="item.merchantId" v-model="radioGroup"
+                                <input type="radio" name="merchant" :value="item.merchantId" v-model="merchantId"
                                   id="stylingRadio"
                                 >
                             </v-col>
@@ -39,7 +39,7 @@
                                 <p>{{item.productPrice}}</p>
                             </v-col>
                         </v-row>
-                        {{radioGroup}}
+                        {{merchantId}}
                     </v-col>
                 </v-row>
                 <v-row style="margin-top:15px">
@@ -62,7 +62,7 @@
         <v-row>
             <v-row lg="10"></v-row>
             <v-col lg="2">
-                <v-btn :disabled="radioGroup==''" color="#E75A34" @click="addToCart">
+                <v-btn :disabled="merchantId==''" color="#E75A34" @click="addToCart">
                         <span style="color:white" >Add To Cart</span>
                 </v-btn>
             </v-col>
@@ -74,7 +74,7 @@ import axios from 'axios'
     export default{
         data: function(){
            return{
-             radioGroup: '',
+             merchantId: '',
              quantity:1,
              productDetails: {},
              items: ['1','2','3','4','5','6','7','8','9','10'],
@@ -82,15 +82,34 @@ import axios from 'axios'
         },
         methods:{
             addToCart(){
-                window.console.log("cart")
-                //quantity,productId,merchantId,customerId and set quantity back to 1
+                let payload = {
+                    cartDtoList:[
+                        {
+                            customerId: 'cus1',
+                            productId: this.$route.params.productId,
+                            merchantId: this.merchantId,
+                            quantityBrought: this.quantity
+                        }
+                    ]
+                }
+                axios({
+                    url: 'http://10.177.69.78:8085/cart/',
+                    method: 'post',
+                    data: payload.cartDtoList
+
+                }).then(function(response){
+                    window.console.log(response)
+                })
+                .catch(function(error){
+                    window.console.log(error)
+                })
             }
         },
         created(){
             let that = this;
             axios.get(`http://10.177.68.26:8080/product/getProductDetails/${this.$route.params.productId}`)
             .then(function(response){
-                window.console.log(response.data)
+                // window.console.log(response.data)
                 that.productDetails = response.data
             }).catch(function(err){
                 window.console.log(err);
