@@ -3,13 +3,14 @@
         <v-row>
         <v-col v-for="(item,n) in productListForCategory.data" 
               :key="n"
+              @click="product(item.productId)"
               lg="3"
               style="margin-top:2%"
             >
                 <v-card style="margin:auto;text-align:center;max-width:300px">
                     <div>
                         <div style="margin:auto;width:300px">
-                            <v-img :src="item.imageUrl"
+                           <v-img :src="item.imageUrl"
                             :max-height="300"
                             :max-width="250"
                             :contain="true"
@@ -38,63 +39,6 @@
 export default{
     data: function(){
         return{
-            productList:[
-                {
-                    productName:'product name',
-                    productId: 123,
-                    image:'https://ii1.pepperfry.com/media/wysiwyg/banners/02_web_ns_Furniture_30122019.jpg',
-                    price:124,
-                    merchantName:'merchant name',
-                    rating:3,
-                    merchantId:432
-                },
-                {
-                    productName:'product name',
-                    productId: 123,
-                    image:'https://ii1.pepperfry.com/media/wysiwyg/banners/02_web_ns_Furniture_30122019.jpg',
-                    price:124,
-                    merchantName:'merchant name',
-                    rating:4,
-                    merchantId:432
-                },
-                {
-                    productName:'product name',
-                    productId: 123,
-                    image:'https://ii1.pepperfry.com/media/wysiwyg/banners/02_web_ns_Furniture_30122019.jpg',
-                    price:124,
-                    merchantName:'merchant name',
-                    rating:2,
-                    merchantId:432
-                },
-                {
-                    productName:'product name',
-                    productId: 123,
-                    image:'https://ii1.pepperfry.com/media/wysiwyg/banners/02_web_ns_Furniture_30122019.jpg',
-                    price:124,
-                    merchantName:'merchant name',
-                    rating:1,
-                    merchantId:432
-                },
-                {
-                    productName:'product name',
-                    productId: 123,
-                    image:'https://ii1.pepperfry.com/media/wysiwyg/banners/02_web_ns_Furniture_30122019.jpg',
-                    price:124,
-                    merchantName:'merchant name',
-                    rating:4,
-                    merchantId:432
-                },
-                {
-                    productName:'product name',
-                    productId: 123,
-                    image:'https://ii1.pepperfry.com/media/wysiwyg/banners/02_web_ns_Furniture_30122019.jpg',
-                    price:124,
-                    merchantName:'merchant name',
-                    rating:2,
-                    merchantId:432
-                }
-                
-            ]
         }
     },
     computed:{
@@ -103,6 +47,11 @@ export default{
         },
         watchCategory(){
             return this.$route.query.categoryId
+        }
+    },
+    methods:{
+        product(productId){
+            this.$router.push({path:`/product/${productId}`})
         }
     },
     created(){

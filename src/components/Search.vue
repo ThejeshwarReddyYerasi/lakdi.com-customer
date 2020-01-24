@@ -3,6 +3,7 @@
         <v-row>
             <v-col v-for="(item,n) in productListForSearch" 
               :key="n"
+              @click="product(item.productId)"
               lg="3"
               style="margin-top:2%"
             >
@@ -52,6 +53,11 @@ export default{
     created(){
         // window.console.log(this.$route.query.searchString);
         this.$store.dispatch('search',this.$route.query.searchString);
+    },
+    methods:{
+        product(productId){
+            this.$router.push({path:`/product/${productId}`})
+        }
     },
     watch: {
       getRoute: function(){

@@ -1,7 +1,7 @@
 <template>
     <div>
-        <v-card id="outerDiv" v-if="temporary" elevation="4">
-            <div style="text-align:center;margin-top:10px;color:grey;font-size:24px;font-family:cursive">
+        <v-card id="outerDiv" v-if="temporary">
+            <div class="headerText">
                 <p>
                     <b>Sign In With</b>
                 </p>
@@ -21,30 +21,39 @@
                 </v-row>
             </div>
             <div class="inner">
-                <p>email</p><input type="text" class="input" v-model="email">
+                <p class="label">Email</p><input type="text" class="input" v-model="email">
             </div>
             <div class="inner">
-                <p>password</p><input type="password" class="input" v-model="password">
+                <p class="label">Password</p><input type="password" class="input" v-model="password">
             </div>
             <div class="inner">
-                <v-btn @click="login(email,password)" style="width:100%;color:white" color="#212121">sign in</v-btn>
+                <v-btn @click="login(email,password)" class="button" color="#212121">sign in</v-btn>
             </div>
             <div class="inner">
-                <v-btn @click="invert">{{temporaryVariable}}</v-btn> 
+                <v-btn @click="invert" class="button" color="#212121">{{temporaryVariable}}</v-btn> 
             </div>
         </v-card>
         <v-card v-else id="outerDiv">
-            <div class="inner">
-                <p>email</p><input type="text" class="input" v-model="email">
+            <div class="headerText" style="margin-top:20px">
+                <p>
+                    <b>Create Account</b>
+                </p>
             </div>
-            <div class="inner">
-                <p>password</p><input type="password" class="input" v-model="password">
+            <div class="inner" style="margin-top:30px">
+                <p class="label">Email:</p><input type="text" class="input" v-model="email">
             </div>
-            <div>
-                <v-btn @click="manualSignIn(email,password)">signup</v-btn>
+            <div class="inner"  style="margin-top:30px">
+                <p class="label">Password</p><input type="password" class="input" v-model="password">
             </div>
-            <div>
-                <v-btn @click="invert">login</v-btn>
+            <div class="inner" style="margin-top:50px">
+                <v-btn @click="manualSignIn(email,password)"
+                class="button" color="#212121"
+                >sign up</v-btn>
+            </div>
+            <div class="inner" style="margin-top:30px">
+                <v-btn
+                class="button" color="#212121"
+                 @click="invert">log in</v-btn>
             </div>
         </v-card>
     </div>
@@ -122,12 +131,13 @@ import { googleProvider, facebookProvider, auth } from "../firebaseConfig";
        height:30px;
        width: 100%;
        border: 0.8px solid black;
-       background-color: azure;
+       background-color:#F8F8F8;
        text-align: center
    }
 #outerDiv{
     margin:auto;
     width:400px;
+    /* height:450px; */
     border: 0.8px solid black;
     margin-top: 10%;
 }
@@ -136,5 +146,22 @@ import { googleProvider, facebookProvider, auth } from "../firebaseConfig";
     width:300px;
     margin-top:20px;
     margin-bottom: 20px;
+}
+.button{
+    width:100%;
+    color:white;
+    /* background-color:black; */
+}
+.label{
+    font-size: 18px;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    padding-bottom: 5px;
+}
+.headerText{
+    text-align:center;
+    margin-top:10px;
+    color:grey;
+    font-size:24px;
+    font-family:cursive
 }
 </style>

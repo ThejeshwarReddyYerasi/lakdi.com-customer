@@ -32,7 +32,7 @@
               fas fa-truck
              </v-icon>
             </v-btn>
-            <v-btn icon class="headerButtons">
+            <v-btn icon @click="profile" class="headerButtons">
              <v-icon  x-large>
               account_circle
              </v-icon>
@@ -73,6 +73,9 @@
       },
       orders(){
         this.$router.push({path:'/orders'})
+      },
+      profile(){
+        this.$router.push({path:'/profile'})
       },
       search(){
       if(this.$route.query.searchString!=this.searchString){

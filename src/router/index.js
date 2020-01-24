@@ -7,6 +7,7 @@ import Cart from '../components/Cart.vue'
 import Login from '../components/Login.vue'
 import Search from '../components/Search.vue'
 import Order from '../components/order.vue'
+import Profile from '../components/Profile.vue'
 
 Vue.use(VueRouter)
 
@@ -45,6 +46,11 @@ const routes = [
     path: '/orders',
     name: 'orders',
     component: Order
+  },
+  {
+    path: '/profile',
+    name: 'profile',
+    component: Profile
   }
 ]
 
