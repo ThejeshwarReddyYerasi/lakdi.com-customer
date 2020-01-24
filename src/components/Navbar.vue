@@ -27,7 +27,7 @@
             <v-btn icon @click="cart" class="headerButtons">
              <v-icon x-large>add_shopping_cart</v-icon>
             </v-btn>
-            <v-btn icon class="headerButtons">
+            <v-btn icon @click="orders" class="headerButtons">
              <v-icon large>
               fas fa-truck
              </v-icon>
@@ -70,6 +70,9 @@
       },
       cart(){
         this.$router.push({path:'/cart'})
+      },
+      orders(){
+        this.$router.push({path:'/orders'})
       },
       search(){
       if(this.$route.query.searchString!=this.searchString){

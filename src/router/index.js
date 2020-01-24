@@ -6,6 +6,7 @@ import productList from '../components/ProductList.vue'
 import Cart from '../components/Cart.vue'
 import Login from '../components/Login.vue'
 import Search from '../components/Search.vue'
+import Order from '../components/order.vue'
 
 Vue.use(VueRouter)
 
@@ -39,6 +40,11 @@ const routes = [
     path: '/search',
     name: 'search',
     component: Search
+  },
+  {
+    path: '/orders',
+    name: 'orders',
+    component: Order
   }
 ]
 
