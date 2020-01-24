@@ -18,6 +18,11 @@ export default {
   data: () => ({
     //
   }),
+  created(){
+    fetch('/backend/spring-cloud-eureka-client-search/search/searchQuery/red',{
+      method: 'GET'
+    })
+  }
 };
 </script>
 

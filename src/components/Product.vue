@@ -93,7 +93,7 @@ import axios from 'axios'
                     ]
                 }
                 axios({
-                    url: 'http://10.177.69.78:8085/cart/',
+                    url: 'http://10.177.69.50:8762/spring-cloud-eureka-client-cartandorder/cart/',
                     method: 'post',
                     data: payload.cartDtoList
 
@@ -107,7 +107,7 @@ import axios from 'axios'
         },
         created(){
             let that = this;
-            axios.get(`http://10.177.68.26:8080/product/getProductDetails/${this.$route.params.productId}`)
+            axios.get(`http://10.177.69.50:8762/spring-cloud-eureka-client-product/product/getProductDetails/${this.$route.params.productId}`)
             .then(function(response){
                 // window.console.log(response.data)
                 that.productDetails = response.data

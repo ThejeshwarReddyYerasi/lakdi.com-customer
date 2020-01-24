@@ -15,7 +15,7 @@ export default new Vuex.Store({
   },
   mutations: {
     GET_PRODUCTS_OF_PARTICULAR_CATEGORY: (state,payload) => {
-      axios.get(`http://10.177.68.26:8080/product/getCategoryProducts/${payload}`)
+      axios.get(`http://10.177.69.50:8762/spring-cloud-eureka-client-product/product/getCategoryProducts/${payload}`)
       .then(function(response){
         window.console.log(response.data);
         state.productListForCategory  = response.data;
@@ -26,7 +26,7 @@ export default new Vuex.Store({
     },
     SEARCH: (state,payload) => {
       //get request 
-      axios.get(`http://10.177.69.50:8080/search/searchQuery/${payload}`)
+      axios.get(`http://10.177.69.50:8762/spring-cloud-eureka-client-search/search/searchQuery/${payload}`)
       .then(function(response){
         state.productListForSearch = response.data;
       })
@@ -36,9 +36,9 @@ export default new Vuex.Store({
     },
     GET_CATEGORIES: (state) => {
       // window.console.log("in state")
-      axios.get('http://10.177.68.26:8111/product/getCategories')
+      axios.get('http://10.177.69.50:8762/spring-cloud-eureka-client-product/product/getCategories')
       .then(function(response){
-        // window.console.log(response.data);
+        window.console.log(response.data);
         state.categoryListObject = response.data;
         // window.console.log(state.categoryListObject.data)
       }).catch(function(err){

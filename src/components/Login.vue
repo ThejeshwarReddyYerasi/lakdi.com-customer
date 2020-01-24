@@ -107,10 +107,12 @@ import { googleProvider, facebookProvider, auth } from "../firebaseConfig";
                 auth.createUserWithEmailAndPassword(email,password)
                 .then(function(){
                     auth.currentUser.getIdTokenResult(true).then(function(id){
+                    localStorage.removeItem('user-token');
                     window.console.log(id); 
                     }); 
                 })
                 .catch(err=>{
+                    localStorage.removeItem('user-token');
                     window.console.log(err);
                 })
             },
@@ -118,8 +120,12 @@ import { googleProvider, facebookProvider, auth } from "../firebaseConfig";
                 auth.signInWithEmailAndPassword(email,password)
                 .then(function(){
                     auth.currentUser.getIdTokenResult(true).then(function(id){
+                    localStorage.removeItem('user-token');
                     window.console.log(id);
                 })
+            }).catch(err=>{
+                localStorage.removeItem('user-token');
+                window.console.log(err);
             })
         }
     }

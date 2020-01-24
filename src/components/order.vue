@@ -103,7 +103,7 @@ export default {
     },
     created(){
         let that = this
-        axios.get('http://10.177.69.78:8085/order/cus1')
+        axios.get('http://10.177.69.50:8762/spring-cloud-eureka-client-cartandorder/order/cus1')
         .then(function(response){
             // window.console.log(response.data)
             that.orders = response.data;

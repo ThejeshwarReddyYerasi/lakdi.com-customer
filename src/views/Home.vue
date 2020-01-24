@@ -127,7 +127,8 @@ export default {
   },
   created(){
     let that = this
-    axios.get('http://10.177.68.26:8111/product/recommendations').then(response=>{
+    axios.get('backend/spring-cloud-eureka-client-product/product/recommendations')
+    .then(response=>{
       // window.console.log(response.data)
       that.recommendations = response.data
     })
