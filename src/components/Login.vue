@@ -95,20 +95,20 @@ import axios from 'axios'
                 localStorage.setItem('user-token',token.token);
                 window.console.log(token.token);
                 that.createUser(localStorage.getItem('user-token'));
-                // if(localStorage.getItem('cartDtoList')!=null){
-                //     axios({
-                //         url: '/backend/cart',
-                //         method: 'post',
-                //         data: JSON.parse(localStorage.getItem('cartDtoList')),
-                //         headers: {token:localStorage.getItem('user-token')}
-                //     }).then(function(response){
-                //         localStorage.removeItem('cartDtoList')
-                //         window.console.log(response)
-                //     })
-                //     .catch(function(error){
-                //         window.console.log(error)
-                //     })
-                // }
+                if(localStorage.getItem('cartDtoList')!=null){
+                    axios({
+                        url: '/backend/cartandorder/cart',
+                        method: 'post',
+                        data: JSON.parse(localStorage.getItem('cartDtoList')),
+                        headers: {token:localStorage.getItem('user-token')}
+                    }).then(function(response){
+                        localStorage.removeItem('cartDtoList')
+                        window.console.log(response)
+                    })
+                    .catch(function(error){
+                        window.console.log(error)
+                    })
+                }
                 that.send(); 
                 }); 
             },
