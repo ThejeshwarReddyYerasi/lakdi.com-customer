@@ -39,7 +39,9 @@
                                 <p class="textOfCard" style="margin-top:20px">Total:{{item.productPrice * item.quantityBrought}}</p>
                                 <div style="margin-top:30px">
                                     <v-col class="d-flex" cols="12" sm="6">
-                                        <v-btn text style="background-color:#F2CC5E">
+                                        <v-btn text style="background-color:#F2CC5E"
+                                          @click="removeProduct(item.productId)"
+                                        >
                                             Remove Product
                                         </v-btn>
                                     </v-col>
@@ -67,50 +69,59 @@ import axios from 'axios'
             return{
                 items: ['1','2','3','4','5','6','7','8','9','10'],
                 quantity:'2',
-                orders:'',
+                orders:{},
                 length:'',
                 subTotalVariable: ''
-                // orders:[
-                //     {
-                //         productName:"product name",
-                //         productId: 123,
-                //         merchantName: "merchant name",
-                //         merchantId: 123,
-                //         image: 'https://ii1.pepperfry.com/media/wysiwyg/banners/02_web_ns_Furniture_30122019.jpg',
-                //         price:234,
-                //         quantity: 2
-                //     },
-                //     {
-                //         productName:"product name",
-                //         productId: 123,
-                //         merchantName: "merchant name",
-                //         merchantId: 123,
-                //         image: 'https://ii1.pepperfry.com/media/wysiwyg/banners/02_web_ns_Furniture_30122019.jpg',
-                //         price:234,
-                //         quantity: 2
-                //     },
-                //     {
-                //         productName:"product name",
-                //         productId: 123,
-                //         merchantName: "merchant name",
-                //         merchantId: 123,
-                //         image: 'https://ii1.pepperfry.com/media/wysiwyg/banners/02_web_ns_Furniture_30122019.jpg',
-                //         price:234,
-                //         quantity: 2
-                //     }
-                // ]
             }
         },
         methods:{
-            getOrderDetails(){
-                window.console.log("clicked") //i have to send token and validate and backend will give me the data
-            },
             updateQuantity(productId,merchantId,i){
                 window.console.log(productId + "+" + merchantId+"+" + i);
                 window.console.log(this.orders[i]);
             },
             checkout(){
-                window.console.log(this.orders)
+                // let that = this
+                if(localStorage.getItem('user-token')==null){
+                    this.$router.push({path:'/login'})
+                }else{
+                    // axios.post('/backend/cartandorder/order',{
+                    //     headers:{
+                    //         token:localStorage.getItem('user-token')
+                    //     },
+                    //     data: {
+                    //         customerId: '',
+                    //         orderedItemsDto: that.orders.data 
+                    //     }
+                    // }).then(function(response){
+                    //     window.console.log(response)
+                    // })
+                    let payload = {
+                        customerId: '',
+                        orderedItemsDto:[]
+                    }
+                    for(let i =0;i<this.orders.data.length;i++){
+                        let pay = {
+                            productId: this.orders.data[i].productId,
+                            merchantId: this.orders.data[i].merchantId,
+                            quantityBrought: this.orders.data[i].quantityBrought,
+                            productPrice: this.orders.data[i].productPrice
+                        }
+                        payload.orderedItemsDto.push(pay)
+                    }
+                    window.console.log(payload)
+                    axios({
+                        url: '/backend/cartandorder/order',
+                        method: 'post',
+                        data: payload,
+                        headers: {token:localStorage.getItem('user-token')}
+
+                    }).then(function(response){
+                        window.console.log(response)
+                    })
+                    .catch(function(error){
+                        window.console.log(error)
+                    })
+                }
             },
             subTotal(){
                 window.console.log("subtotal")
@@ -119,17 +130,47 @@ import axios from 'axios'
                     sum = sum + this.orders.data[i].productPrice*this.orders.data[i].quantityBrought;
                 }
                 this.subTotalVariable = sum;
+            },
+            removeProduct(productId){
+                window.console.log(productId)
+                let cartDtoList = JSON.parse(localStorage.getItem('cartDtoList'));
+                if(localStorage.getItem('user-token')==null){
+                    for( var i = 0; i < cartDtoList.cartDtoList.length; i++){ 
+                        if ( cartDtoList.cartDtoList[i].productId == productId) {
+                            cartDtoList.cartDtoList.splice(i, 1); 
+                        }
+                    }
+                }
+                this.orders.data = cartDtoList.cartDtoList
+                this.length = this.orders.data.length;
+                this.subTotal();
+                localStorage.setItem("cartDtoList",JSON.stringify(cartDtoList))
             }
         },
         created(){
             let that = this
-            axios.get('http://10.177.69.50:8762/spring-cloud-eureka-client-cartandorder/cart/cus1')
-            .then(function(response){
-                window.console.log(response.data)
-                that.orders = response.data
+            let temp = ''
+             if(localStorage.getItem('user-token')==null){
+                window.console.log("no token cart")
+                temp = JSON.parse(localStorage.getItem('cartDtoList'));
+                that.orders.data = temp.cartDtoList
                 that.length = that.orders.data.length;
                 that.subTotal();
-            })
+                // window.console.log(temp.cartDtoList)
+            }
+            else{
+                axios.get('/backend/cartandorder/cart',{
+                    headers:{
+                        token: localStorage.getItem('user-token')
+                    }
+                })
+                .then(function(response){
+                    window.console.log(response.data)
+                    that.orders = response.data
+                    that.length = that.orders.data.length;
+                    that.subTotal();
+                })
+            }
         },
         computed:{
         }

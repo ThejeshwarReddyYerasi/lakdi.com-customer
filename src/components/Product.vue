@@ -82,35 +82,62 @@ import axios from 'axios'
         },
         methods:{
             addToCart(){
-                let payload = {
-                    cartDtoList:[
-                        {
-                            customerId: 'cus1',
-                            productId: this.$route.params.productId,
-                            merchantId: this.merchantId,
-                            quantityBrought: this.quantity
-                        }
-                    ]
-                }
-                axios({
-                    url: 'http://10.177.69.50:8762/spring-cloud-eureka-client-cartandorder/cart/',
-                    method: 'post',
-                    data: payload.cartDtoList
+                if(localStorage.getItem('user-token')==null){
+                    let payload = {
+                        productId: this.$route.params.productId,
+                        merchantId: this.merchantId,
+                        quantityBrought: this.quantity,
+                        productName: this.productDetails.data.product.productName,
+                        imageUrl: this.productDetails.data.product.imageUrl,
+                        productPrice: this.productDetails.data.product.productPrice
+                    }
+                    if(localStorage.getItem('cartDtoList')==null){
+                        var temp = {customerId:'',cartDtoList:[]};
+                        temp.cartDtoList.push(payload)
+                        localStorage.setItem("cartDtoList", JSON.stringify(temp));
+                    }else{
+                        var cartDtoList =JSON.parse(localStorage.getItem('cartDtoList'));
+                        cartDtoList.cartDtoList.push(payload);
+                        localStorage.setItem("cartDtoList", JSON.stringify(cartDtoList));
+                    }
 
-                }).then(function(response){
-                    window.console.log(response)
-                })
-                .catch(function(error){
-                    window.console.log(error)
-                })
+                }else{
+                    let payload = {
+                        customerId: '',
+                        cartDtoList:[
+                            {
+                                productId: this.$route.params.productId,
+                                merchantId: this.merchantId,
+                                quantityBrought: this.quantity
+                            }
+                        ]
+                    }
+                    axios({
+                        url: '/backend/cartandorder/cart',
+                        method: 'post',
+                        data: payload,
+                        headers: {token:localStorage.getItem('user-token')}
+
+                    }).then(function(response){
+                        window.console.log(response)
+                    })
+                    .catch(function(error){
+                        window.console.log(error)
+                    })
+                }
             }
         },
         created(){
             let that = this;
-            axios.get(`http://10.177.69.50:8762/spring-cloud-eureka-client-product/product/getProductDetails/${this.$route.params.productId}`)
+            axios.get(`/backend/product/getProductDetails/${this.$route.params.productId}`)
             .then(function(response){
-                // window.console.log(response.data)
                 that.productDetails = response.data
+                if(that.productDetails.success==false){
+                    axios.get(`/backend/search/get/${this.$route.params.productId}`)
+                    .then(function(response){
+                        that.productDetails = response.data
+                    })
+                }
             }).catch(function(err){
                 window.console.log(err);
             })

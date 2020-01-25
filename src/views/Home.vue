@@ -127,7 +127,7 @@ export default {
   },
   created(){
     let that = this
-    axios.get('backend/spring-cloud-eureka-client-product/product/recommendations')
+    axios.get('/backend/product/recommendations')
     .then(response=>{
       // window.console.log(response.data)
       that.recommendations = response.data

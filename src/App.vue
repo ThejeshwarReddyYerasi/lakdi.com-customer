@@ -7,7 +7,7 @@
 <script>
 
 import navbar from './components/Navbar'
-
+// import {auth } from "./firebaseConfig";
 export default {
   name: 'App',
 
@@ -19,10 +19,12 @@ export default {
     //
   }),
   created(){
-    fetch('/backend/spring-cloud-eureka-client-search/search/searchQuery/red',{
-      method: 'GET'
-    })
-  }
+    if(localStorage.getItem('user-token')===null){
+      window.console.log("appfalse")
+    }else{
+      window.console.log("apptrue")
+    }
+    }
 };
 </script>
 

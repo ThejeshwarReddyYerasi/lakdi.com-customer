@@ -60,6 +60,7 @@
 </template>
 <script>
 import { googleProvider, facebookProvider, auth } from "../firebaseConfig";
+import axios from 'axios'
     export default{
         data: function(){
             return {
@@ -72,17 +73,54 @@ import { googleProvider, facebookProvider, auth } from "../firebaseConfig";
             }
         },
         methods:{
+            send(){
+                this.$router.push({path:'/'})
+            },
+            createUser(tok){
+                let payload={
+                    customerId:''
+                }
+                axios({
+                    url:'/backend/login/',
+                    method: 'post',
+                    data: payload,
+                    headers:{ token: tok }
+                }).then(function(response){
+                    window.console.log(response)
+                })
+            },
+            getTokenFirebase(){
+                let that = this;
+                auth.currentUser.getIdTokenResult(true).then(function(token){
+                localStorage.setItem('user-token',token.token);
+                window.console.log(token.token);
+                that.createUser(localStorage.getItem('user-token'));
+                // if(localStorage.getItem('cartDtoList')!=null){
+                //     axios({
+                //         url: '/backend/cart',
+                //         method: 'post',
+                //         data: JSON.parse(localStorage.getItem('cartDtoList')),
+                //         headers: {token:localStorage.getItem('user-token')}
+                //     }).then(function(response){
+                //         localStorage.removeItem('cartDtoList')
+                //         window.console.log(response)
+                //     })
+                //     .catch(function(error){
+                //         window.console.log(error)
+                //     })
+                // }
+                that.send(); 
+                }); 
+            },
             invert(){
                 this.temporary = !this.temporary;
             },
             googleAuth(){
+                let that = this
                 auth.signInWithPopup(googleProvider)
-                .then(function(result){
-                    let token = result.credential.accessToken;
-                    let user = result.user;
-                    window.console.log("user:" + user);
-                    window.console.log("Token:" + token);
-                    localStorage.setItem('user-token', token)
+                .then(function(){
+                    that.getTokenFirebase();
+                    
                 })
                 .catch(err =>{
                     localStorage.removeItem('user-token');
@@ -90,13 +128,10 @@ import { googleProvider, facebookProvider, auth } from "../firebaseConfig";
                 })
             },
             facebookAuth(){
+                let that = this
                 auth.signInWithPopup(facebookProvider)
-                .then(function(result){
-                    let token = result.credential.accessToken;
-                    let user = result.user;
-                    window.console.log("user:" + user);
-                    window.console.log("Token:" + token);
-                    localStorage.setItem('user-token', token)
+                .then(function(){
+                    that.getTokenFirebase();
                 })
                 .catch(err=>{
                     localStorage.removeItem('user-token');
@@ -104,12 +139,10 @@ import { googleProvider, facebookProvider, auth } from "../firebaseConfig";
                 })
             },
             manualSignIn(email,password){
+                let that = this
                 auth.createUserWithEmailAndPassword(email,password)
                 .then(function(){
-                    auth.currentUser.getIdTokenResult(true).then(function(id){
-                    localStorage.removeItem('user-token');
-                    window.console.log(id); 
-                    }); 
+                     that.getTokenFirebase(); 
                 })
                 .catch(err=>{
                     localStorage.removeItem('user-token');
@@ -117,13 +150,11 @@ import { googleProvider, facebookProvider, auth } from "../firebaseConfig";
                 })
             },
             login(email,password){
+                let that = this;
                 auth.signInWithEmailAndPassword(email,password)
                 .then(function(){
-                    auth.currentUser.getIdTokenResult(true).then(function(id){
-                    localStorage.removeItem('user-token');
-                    window.console.log(id);
-                })
-            }).catch(err=>{
+                    that.getTokenFirebase();
+                }).catch(err=>{
                 localStorage.removeItem('user-token');
                 window.console.log(err);
             })
