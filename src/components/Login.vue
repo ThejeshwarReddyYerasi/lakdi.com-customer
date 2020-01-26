@@ -76,7 +76,38 @@ import axios from 'axios'
             send(){
                 this.$router.push({path:'/'})
             },
+            sendLocalStorageData(){
+                if(localStorage.getItem('cartDtoList')!=null){
+                    let payload={
+                        customerId: '',
+                        cartDtoList:[]
+                    }
+                    let temp = JSON.parse(localStorage.getItem('cartDtoList'));
+                    for(let i=0;i<temp.cartDtoList.length;i++){
+                        let pay = {
+                            productId: temp.cartDtoList[i].productId,
+                            merchantId: temp.cartDtoList[i].merchantId,
+                            quantityBrought: temp.cartDtoList[i].quantityBrought
+                        }
+                        payload.cartDtoList.push(pay)
+                    }
+                    // window.console.log(payload)
+                    axios({
+                        url: '/backend/cartandorder/cart',
+                        method: 'post',
+                        data: payload,
+                        headers: {token:localStorage.getItem('user-token')}
+                    }).then(function(response){
+                        localStorage.removeItem('cartDtoList')
+                        window.console.log(response)
+                    })
+                    .catch(function(error){
+                        window.console.log(error)
+                    })
+                }
+            },
             createUser(tok){
+                let that = this
                 let payload={
                     customerId:'',
                     name:'',
@@ -91,30 +122,17 @@ import axios from 'axios'
                     data: payload,
                     headers:{ token: tok }
                 }).then(function(response){
+                    that.sendLocalStorageData()
                     window.console.log(response)
                 })
             },
             getTokenFirebase(){
                 let that = this;
                 auth.currentUser.getIdTokenResult(true).then(function(token){
-                localStorage.setItem('user-token',token.token);
-                window.console.log(token.token);
-                that.createUser(localStorage.getItem('user-token'));
-                if(localStorage.getItem('cartDtoList')!=null){
-                    axios({
-                        url: '/backend/cartandorder/cart',
-                        method: 'post',
-                        data: JSON.parse(localStorage.getItem('cartDtoList')),
-                        headers: {token:localStorage.getItem('user-token')}
-                    }).then(function(response){
-                        localStorage.removeItem('cartDtoList')
-                        window.console.log(response)
-                    })
-                    .catch(function(error){
-                        window.console.log(error)
-                    })
-                }
-                that.send(); 
+                    localStorage.setItem('user-token',token.token);
+                    window.console.log(token.token);
+                    that.createUser(localStorage.getItem('user-token'));
+                    that.send(); 
                 }); 
             },
             invert(){

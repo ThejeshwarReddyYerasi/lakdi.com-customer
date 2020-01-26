@@ -63,22 +63,26 @@ export default {
         }
     },
     created(){
-        window.console.log(localStorage.getItem('user-token'))
+        // window.console.log(localStorage.getItem('user-token'))
         let that = this
         axios.get('/backend/cartandorder/order',{
             headers:{
-                token: localStorage.getItem('user-token')
+                // token: localStorage.getItem('user-token')
+                token:'we'
             }
         })
         .then(function(response){
-            window.console.log("this is :" + response.data)
+            window.console.log(response)
             that.orders = response.data;
             if(that.orders.data.length>0){
                 that.getOrderDetails(that.orders.data[0].orderId);
             }
         })
         .catch(function(error){
-            window.console.log(error)
+            window.console.log(error.response)
+            // if(error.response.data.status==400){
+            //     window.console.log("400")
+            // }
         })
     },
     methods:{

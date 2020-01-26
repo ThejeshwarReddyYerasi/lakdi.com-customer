@@ -82,6 +82,7 @@ import axios from 'axios'
         },
         methods:{
             addToCart(){
+                let that = this
                 if(localStorage.getItem('user-token')==null){
                     let payload = {
                         productId: this.$route.params.productId,
@@ -121,6 +122,7 @@ import axios from 'axios'
 
                     }).then(function(response){
                         window.console.log(response)
+                        that.$router.push({path:'/cart'})
                     })
                     .catch(function(error){
                         window.console.log(error)

@@ -121,33 +121,35 @@ import axios from 'axios'
                 this.subTotalVariable = sum;
             },
             removeProduct(productId){
-                window.console.log(productId)
-                let cartDtoList = JSON.parse(localStorage.getItem('cartDtoList'));
                 if(localStorage.getItem('user-token')==null){
-                    for( var i = 0; i < cartDtoList.cartDtoList.length; i++){ 
-                        if ( cartDtoList.cartDtoList[i].productId == productId) {
-                            cartDtoList.cartDtoList.splice(i, 1); 
+                    let cartDtoList = JSON.parse(localStorage.getItem('cartDtoList'));
+                    if(localStorage.getItem('user-token')==null){
+                        for( var i = 0; i < cartDtoList.cartDtoList.length; i++){ 
+                            if ( cartDtoList.cartDtoList[i].productId == productId) {
+                                cartDtoList.cartDtoList.splice(i, 1); 
+                            }
                         }
                     }
+                    this.orders.data = cartDtoList.cartDtoList
+                    this.length = this.orders.data.length;
+                    this.subTotal();
+                    localStorage.setItem("cartDtoList",JSON.stringify(cartDtoList))
                 }
-                this.orders.data = cartDtoList.cartDtoList
-                this.length = this.orders.data.length;
-                this.subTotal();
-                localStorage.setItem("cartDtoList",JSON.stringify(cartDtoList))
             }
         },
         created(){
             let that = this
-            // let temp = ''
-            //  if(localStorage.getItem('user-token')==null){
-            //     window.console.log("no token cart")
-            //     temp = localStorage.getItem('cartDtoList');
-            //     that.orders.data = temp.cartDtoList
-            //     that.length = that.orders.data.length;
-            //     that.subTotal();
-            //     // window.console.log(temp.cartDtoList)
-            // }
-            // else{
+            let temp = ''
+             if(localStorage.getItem('user-token')==null){
+                window.console.log("no token cart")
+                temp = JSON.parse(localStorage.getItem('cartDtoList'));
+                that.orders.data = temp.cartDtoList;
+                // window.console.log(that.orders)
+                that.length = that.orders.data.length;
+                that.subTotal();
+                // window.console.log(temp.cartDtoList)
+            }
+            else{
                 window.console.log(localStorage.getItem('user-token'))
                 axios.get('/backend/cartandorder/cart',{
                     headers:{
@@ -163,7 +165,7 @@ import axios from 'axios'
                 .catch(function(response){
                     window.console.log(response)
                 })
-            // }
+            }
         },
         computed:{
         }
