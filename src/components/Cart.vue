@@ -148,18 +148,6 @@ import axios from 'axios'
             //     // window.console.log(temp.cartDtoList)
             // }
             // else{
-                // fetch("/dummy/cart", {
-                //     method: "GET",
-                //     headers: {
-                //         "token": JSON.stringify(localStorage.getItem('user-token'))
-                //     }
-                // })
-                // .then(function(res) {
-                //     window.console.log("My res: "+ res)
-                // })
-                // .catch(function(err) {
-                //     window.console.log("error in cart: "+ err)
-                // })
                 window.console.log(localStorage.getItem('user-token'))
                 axios.get('/backend/cartandorder/cart',{
                     headers:{

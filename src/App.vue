@@ -14,11 +14,11 @@ export default {
   components: {
     navbar,
   },
-
   data: () => ({
     //
   }),
   created(){
+    window.console.log("app.vue")
     if(localStorage.getItem('user-token')===null){
       window.console.log("appfalse")
     }else{

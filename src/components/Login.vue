@@ -78,7 +78,12 @@ import axios from 'axios'
             },
             createUser(tok){
                 let payload={
-                    customerId:''
+                    customerId:'',
+                    name:'',
+                    address:'',
+                    contactNo:'',
+                    email: '',
+                    imageUrl: ''
                 }
                 axios({
                     url:'/backend/login/',

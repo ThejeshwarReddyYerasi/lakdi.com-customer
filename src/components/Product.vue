@@ -49,8 +49,8 @@
                         </p>
                     </v-col>
                     <v-col>
-                        <select class="classic">
-                            <option v-for="(item,n) in items" 
+                        <select class="classic" v-model="quantity">
+                            <option v-for="(item,n) in items"  
                             :key="n">
                                 <div>{{item}}</div>
                             </option>
@@ -112,6 +112,7 @@ import axios from 'axios'
                             }
                         ]
                     }
+                    window.console.log(payload)
                     axios({
                         url: '/backend/cartandorder/cart',
                         method: 'post',
