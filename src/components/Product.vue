@@ -21,7 +21,7 @@
                         <p class="textOfCard">Price: <span>{{productDetails.productPrice}}</span></p>
                         <p class="textOfCard">Details:</p>
                         <p class="textOfCard">Description: <span>{{productDetails.productDescription}}</span></p>
-                        <p class="textOfCard">Rating: <v-rating v-model="productDetails.productRating"></v-rating></p>
+                        <p class="textOfCard">Rating: <v-rating v-model="productDetails.productRating" :readonly="true"></v-rating></p>
                         <p v-for="(value,name) in productDetails.productAttributes" :key="name"
                         class="textOfCard">
                             {{name}}:{{value}}
@@ -66,7 +66,7 @@
                 <v-card style="display:inline-block;width:400px;margin:10px;border: 1px solid black;padding:5px"
                     v-for="(item,n) in reviewDetails" :key="n"
                 >
-                    <p>rating: <v-rating v-model="item.rating"></v-rating></p>
+                    <p>rating: <v-rating v-model="item.rating" :readonly="true"></v-rating></p>
                     <p>review:<span>{{item.review}}</span></p>
                 </v-card>
             </v-col>
@@ -93,7 +93,7 @@ import axios from 'axios'
                  imageUrl:'',
                  productAttributes:{},
                  productPrice:'',
-                 productRating:'',
+                 productRating:0,
                  productDescription:''
              },
              merchantList:[],

@@ -9,7 +9,7 @@
                     Sub Total:{{subTotalVariable}}
                 </v-col>
             </v-row>
-            <v-row>
+            <v-row v-if="check">
                 <v-col lg="6" v-for="(item,n) in orders.data" :key="n">
                     <v-card>
                         <v-row>
@@ -130,6 +130,12 @@ import axios from 'axios'
                     this.length = this.orders.data.length;
                     this.subTotal();
                     localStorage.setItem("cartDtoList",JSON.stringify(cartDtoList))
+
+                    let temporary = JSON.parse(localStorage.getItem('cartDtoList'))
+                    window.console.log(temporary)
+                    if(temporary.cartDtoList.length==0){
+                        localStorage.removeItem('cartDtoList')
+                    }
                 }
                 else{
                     let payload = {
@@ -181,6 +187,13 @@ import axios from 'axios'
             }
         },
         computed:{
+            check(){
+                if(this.orders.data.length>0){
+                    return true
+                }else{
+                    return false
+                }
+            }
         }
     }
 </script>

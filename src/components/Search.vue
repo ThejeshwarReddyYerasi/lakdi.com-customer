@@ -26,7 +26,7 @@
                               {{name}} : {{value}}
                           </p>
                           <p class="textOfCard" style="text-align:center">
-                              <v-rating v-model="item.productRating"></v-rating>
+                              <v-rating v-model="item.productRating" :readonly="true"></v-rating>
                               </p>
                         </div>
                     </div>
