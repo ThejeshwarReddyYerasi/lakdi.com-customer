@@ -1,34 +1,35 @@
 <template>
     <div>
-        <v-row v-if="check">
+        <v-row>
             <v-col style="background-color:#F5F5F5;text-align:center;margin-top:25px;margin-bottom:25px">
-                {{productDetails.data.product.productName}}
+                {{productDetails.productName}}
             </v-col>
         </v-row>
-        <v-row align="center" v-if="check">
+        <v-row align="center" >
             <v-col lg="6" class="center">
                 <v-img style="margin:auto"
-                :src="productDetails.data.product.imageUrl"
-                max-height="500"
+                :src="productDetails.imageUrl"
+                max-height="400"
                 max-width="450"
+                :contain="true"
                 >         
                 </v-img>
             </v-col>
             <v-col lg="6">
                 <v-row>
                     <v-col lg="6">
-                        <p class="textOfCard">Price: <span>{{productDetails.data.product.productPrice}}</span></p>
+                        <p class="textOfCard">Price: <span>{{productDetails.productPrice}}</span></p>
                         <p class="textOfCard">Details:</p>
-                        <p class="textOfCard">Description: <span>{{productDetails.data.product.productDescription}}</span></p>
-                        <p class="textOfCard">Rating: <v-rating v-model="productDetails.data.product.productRating"></v-rating></p>
-                        <p v-for="(value,name) in productDetails.data.product.productAttributes" :key="name"
+                        <p class="textOfCard">Description: <span>{{productDetails.productDescription}}</span></p>
+                        <p class="textOfCard">Rating: <v-rating v-model="productDetails.productRating"></v-rating></p>
+                        <p v-for="(value,name) in productDetails.productAttributes" :key="name"
                         class="textOfCard">
                             {{name}}:{{value}}
                         </p>
                     </v-col>
-                    <v-col lg="6" v-if="productDetails.data.merchantList">
+                    <v-col lg="6" v-if="merchantList">
                         Sellers:
-                        <v-row v-for="(item,n) in productDetails.data.merchantList" :key="n">
+                        <v-row v-for="(item,n) in merchantList" :key="n">
                             <v-col lg="2">
                                 <input type="radio" name="merchant" :value="item.merchantId" v-model="merchantId"
                                   id="stylingRadio"
@@ -60,7 +61,15 @@
             </v-col>
         </v-row>
         <v-row>
-            <v-row lg="10"></v-row>
+            <v-col lg="10">
+                <p style="padding-bottom:5px">Customer Reviews:</p>
+                <v-card style="display:inline-block;width:400px;margin:10px;border: 1px solid black;padding:5px"
+                    v-for="(item,n) in reviewDetails" :key="n"
+                >
+                    <p>rating: <v-rating v-model="item.rating"></v-rating></p>
+                    <p>review:<span>{{item.review}}</span></p>
+                </v-card>
+            </v-col>
             <v-col lg="2">
                 <v-btn :disabled="merchantId==''" color="#E75A34" @click="addToCart">
                         <span style="color:white" >Add To Cart</span>
@@ -76,11 +85,42 @@ import axios from 'axios'
            return{
              merchantId: '',
              quantity:1,
-             productDetails: {},
+             errorCode: false,
+             productDetails: {
+                 productId:'',
+                 categoryId:'',
+                 productName:'',
+                 imageUrl:'',
+                 productAttributes:{},
+                 productPrice:'',
+                 productRating:'',
+                 productDescription:''
+             },
+             merchantList:[],
+            //  merchantList
+             reviewDetails:{},
              items: ['1','2','3','4','5','6','7','8','9','10'],
            }
         },
         methods:{
+            getFromsSearch(){
+                axios.get(`/backend/search/get/${this.$route.params.productId}`)
+                .then(function(response){
+                this.productDetails.productId = response.data.data.product.productId
+                this.productDetails.productName =  response.data.data.product.productName
+                this.productDetails.categoryId =  response.data.data.product.categoryId
+                this.productDetails.imageUrl =  response.data.data.product.imageUrl
+                this.productDetails.productAttributes =  response.data.data.product.productAttributes
+                this.productDetails.productPrice =  response.data.data.product.productPrice
+                this.productDetails.productRating =  response.data.data.product.productRating
+                this.productDetails.productDescription =  response.data.data.product.productDescription
+
+                this.merchantList = response.data.data.merchantList
+
+                    window.console.log(this.productDetails)
+                    // that.productDetails = response.data
+            })
+            },
             addToCart(){
                 let that = this
                 if(localStorage.getItem('user-token')==null){
@@ -88,9 +128,9 @@ import axios from 'axios'
                         productId: this.$route.params.productId,
                         merchantId: this.merchantId,
                         quantityBrought: this.quantity,
-                        productName: this.productDetails.data.product.productName,
-                        imageUrl: this.productDetails.data.product.imageUrl,
-                        productPrice: this.productDetails.data.product.productPrice
+                        productName: this.productDetails.productName,
+                        imageUrl: this.productDetails.imageUrl,
+                        productPrice: this.productDetails.productPrice
                     }
                     if(localStorage.getItem('cartDtoList')==null){
                         var temp = {customerId:'',cartDtoList:[]};
@@ -134,24 +174,38 @@ import axios from 'axios'
             let that = this;
             axios.get(`/backend/product/getProductDetails/${this.$route.params.productId}`)
             .then(function(response){
-                that.productDetails = response.data
-                if(that.productDetails.success==false){
-                    axios.get(`/backend/search/get/${this.$route.params.productId}`)
-                    .then(function(response){
-                        that.productDetails = response.data
-                    })
+                that.productDetails.productId = response.data.data.product.productId
+                that.productDetails.productName =  response.data.data.product.productName
+                that.productDetails.categoryId =  response.data.data.product.categoryId
+                that.productDetails.imageUrl =  response.data.data.product.imageUrl
+                that.productDetails.productAttributes =  response.data.data.product.productAttributes
+                that.productDetails.productPrice =  response.data.data.product.productPrice
+                that.productDetails.productRating =  response.data.data.product.productRating
+                that.productDetails.productDescription =  response.data.data.product.productDescription
+
+                that.merchantList = response.data.data.merchantList
+                window.console.log(that.productDetails)
+
+                if(response.data.success==false){
+                    that.getFromsSearch();
                 }
             }).catch(function(err){
+                that.getFromsSearch();
                 window.console.log(err);
             })
+            axios.get(`/backend/review/get/${this.$route.params.productId}`)
+            .then(function(response){
+                that.reviewDetails = response.data.data
+            })
+            
         },
         computed:{
             check(){
-                if(Object.keys(this.productDetails)<1){
-                return false;
+                if(this.productDetails.success==true){
+                return true;
                 }
                 else{
-                    return true
+                    return false
                 }
             }
         }

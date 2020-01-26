@@ -40,7 +40,7 @@
                                 <div style="margin-top:30px">
                                     <v-col class="d-flex" cols="12" sm="6">
                                         <v-btn text style="background-color:#F2CC5E"
-                                          @click="removeProduct(item.productId)"
+                                          @click="removeProduct(item.productId,item.merchantId)"
                                         >
                                             Remove Product
                                         </v-btn>
@@ -75,10 +75,6 @@ import axios from 'axios'
             }
         },
         methods:{
-            updateQuantity(productId,merchantId,i){
-                window.console.log(productId + "+" + merchantId+"+" + i);
-                window.console.log(this.orders[i]);
-            },
             checkout(){
                 // let that = this
                 if(localStorage.getItem('user-token')==null){
@@ -120,7 +116,7 @@ import axios from 'axios'
                 }
                 this.subTotalVariable = sum;
             },
-            removeProduct(productId){
+            removeProduct(productId,merchantId){
                 if(localStorage.getItem('user-token')==null){
                     let cartDtoList = JSON.parse(localStorage.getItem('cartDtoList'));
                     if(localStorage.getItem('user-token')==null){
@@ -135,12 +131,29 @@ import axios from 'axios'
                     this.subTotal();
                     localStorage.setItem("cartDtoList",JSON.stringify(cartDtoList))
                 }
+                else{
+                    let payload = {
+                        customerId:'',
+                        productId: productId,
+                        merchantId: merchantId
+                    }
+                    window.console.log(payload)
+                    axios({
+                        url: '/backend/cartandorder/cart',
+                        method: 'delete',
+                        data: payload,
+                        headers: {token:localStorage.getItem('user-token')}
+                    })
+                    .then(function(response){
+                        window.console.log(response)
+                    })
+                }
             }
         },
         created(){
             let that = this
             let temp = ''
-             if(localStorage.getItem('user-token')==null){
+             if(localStorage.getItem('user-token')==null && localStorage.getItem('cartDtoList')!=null){
                 window.console.log("no token cart")
                 temp = JSON.parse(localStorage.getItem('cartDtoList'));
                 that.orders.data = temp.cartDtoList;
@@ -149,7 +162,7 @@ import axios from 'axios'
                 that.subTotal();
                 // window.console.log(temp.cartDtoList)
             }
-            else{
+            else if(localStorage.getItem('user-token')!=null){
                 window.console.log(localStorage.getItem('user-token'))
                 axios.get('/backend/cartandorder/cart',{
                     headers:{

@@ -44,6 +44,17 @@
                                     <p class="text">quantity: {{item.quantityBrought}}</p>
                                 </v-col>
                             </v-row>
+                            <v-row>
+                                <v-col><p> Rate: <v-rating v-model="rating"></v-rating></p></v-col>
+                                <v-col>
+                                    <p>Review:</p><input type="textarea" id="inputField" v-model="review">
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col>
+                                    <v-btn @click="submitReview(item.productId,item.orderId)">Submit</v-btn>
+                                </v-col>
+                            </v-row>
                         <v-divider></v-divider>
                         </v-col>
                     </v-row>
@@ -57,9 +68,10 @@ import axios from 'axios'
 export default {
     data: function(){
         return{
-            clas:'',
             orders:{},
-            orderDetails:{}
+            orderDetails:{},
+            rating:0,
+            review:''
         }
     },
     created(){
@@ -67,8 +79,8 @@ export default {
         let that = this
         axios.get('/backend/cartandorder/order',{
             headers:{
-                // token: localStorage.getItem('user-token')
-                token:'we'
+                token: localStorage.getItem('user-token')
+                // token:'we'
             }
         })
         .then(function(response){
@@ -91,7 +103,27 @@ export default {
             axios.get(`backend/cartandorder/orderedItem/${orderId}`)
             .then(function(response){
                 that.orderDetails = response.data;
-                // window.console.log(response.data);
+                window.console.log(response.data);
+            })
+        },
+        submitReview(productId,orderId){
+            let that = this
+            let payload = {
+                orderId:orderId,
+                productId:productId,
+                review:this.review,
+                rating:this.rating
+            }
+            window.console.log(payload)
+            axios({
+                url: '/backend/review/add',
+                method: 'post',
+                data: payload
+            })
+            .then(function(response){
+                window.console.log(response)
+                that.rating = 0;
+                that.review = ''
             })
         }
     },
@@ -116,5 +148,11 @@ export default {
 }
 #rightMargin{
     margin-right: 20px
+}
+#inputField{
+    border: thin solid black;
+    width: 80%;
+    height: 100px;
+
 }
 </style>
