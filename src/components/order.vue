@@ -75,6 +75,9 @@ export default {
         }
     },
     created(){
+        if(localStorage.getItem('user-token')==null){
+            this.$router.push({path:'/login'})
+        }else{
         // window.console.log(localStorage.getItem('user-token'))
         let that = this
         axios.get('/backend/cartandorder/order',{
@@ -96,6 +99,7 @@ export default {
             //     window.console.log("400")
             // }
         })
+        }
     },
     methods:{
         getOrderDetails(orderId){

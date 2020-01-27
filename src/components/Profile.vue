@@ -23,16 +23,16 @@
                     </v-col>
                     <v-col>
                         <div class="label">
-                            <p>Name:</p><input type="text" class="inputField" :disabled="value" v-model="profile.data.name">
+                            <p>Name:</p><input type="text" class="inputField" :disabled="value" v-model="profile.name">
                         </div>
                         <div class="label">
-                            <p>Email:</p><input type="text" class="inputField" disabled v-model="profile.data.email">
+                            <p>Email:</p><input type="text" class="inputField" disabled v-model="profile.email">
                         </div>
                         <div class="label">
-                            <p>Contact Number:</p><input type="number" class="inputField" :disabled="value" v-model="profile.data.contactNo">
+                            <p>Contact Number:</p><input type="number" class="inputField" :disabled="value" v-model="profile.contactNo">
                         </div>
                         <div class="label">
-                            <p>Address:</p><input type="text" class="inputField" :disabled="value" v-model="profile.data.address">
+                            <p>Address:</p><input type="text" class="inputField" :disabled="value" v-model="profile.address">
                         </div>
                     </v-col>
                 </v-row>
@@ -61,7 +61,12 @@ import axios from 'axios'
                 value:true,
                 content: 'Edit',
                 imageUrl:'',
-                profile: {}
+                profile: {
+                    name:'',
+                    email: '',
+                    contactNo: '',
+                    address:''
+                }
 
             }
         },
@@ -78,9 +83,9 @@ import axios from 'axios'
                 }else{
                     let payload={
                         customerId:'',
-                        name:that.profile.data.name,
-                        address:that.profile.data.address,
-                        contactNo: that.profile.data.contactNo,
+                        name:that.profile.name,
+                        address:that.profile.address,
+                        contactNo: that.profile.contactNo,
                         email: '',
                         imageUrl: ''
                     }
@@ -110,8 +115,11 @@ import axios from 'axios'
                 }
             })
             .then(function(response){
-                that.profile = response.data;
-                window.console.log(response)
+                // that.profile = response.data;
+                that.profile.name = response.data.data.name
+                that.profile.email = response.data.data.email
+                that.profile.contactNo = response.data.data.contactNo
+                that.profile.address = response.data.data.address
             })
         }
     }
