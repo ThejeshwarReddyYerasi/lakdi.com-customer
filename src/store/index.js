@@ -17,7 +17,7 @@ export default new Vuex.Store({
     GET_PRODUCTS_OF_PARTICULAR_CATEGORY: (state,payload) => {
       axios.get(`/backend/product/getCategoryProducts/${payload}`)
       .then(function(response){
-        window.console.log(response.data);
+        // window.console.log(response.data);
         state.productListForCategory  = response.data;
       })
       .catch(function(err){
