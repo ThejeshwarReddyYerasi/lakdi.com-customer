@@ -38,14 +38,17 @@
                 </v-row>
                 <v-row style="margin-top:50px">
                     <v-col lg="6" style="text-align:center">
-                        <v-btn style="margin-right:80px;margin-bottom:40px"
-                         @click="signOut"
+                        <v-btn style="margin-right:80px;margin-bottom:40px;color:white"
+                         @click="signOut" color="#D85430"
                         >Sign Out</v-btn>
                     </v-col>
                     <v-col lg="6">
-                        <v-btn style="margin-bottom:40px"
-                            @click="editAndSave"
-                        >{{content}}</v-btn>
+                        <v-btn style="margin-bottom:40px;color:white" v-if="this.value==true"
+                            @click="edit" color="#D85430" 
+                        >Edit</v-btn>
+                        <v-btn   style="margin-bottom:40px;color:white" v-if="this.value==false"
+                            @click="Save" :disabled="validation" color="#D85430"
+                        >Save</v-btn>
                     </v-col>
                 </v-row>
             </v-card>
@@ -59,8 +62,8 @@ import axios from 'axios'
         data: function(){
             return{
                 value:true,
-                content: 'Edit',
                 imageUrl:'',
+                isDis: true,
                 profile: {
                     name:'',
                     email: '',
@@ -73,14 +76,15 @@ import axios from 'axios'
         methods:{
             signOut(){
                 localStorage.removeItem('user-token')
-                this.$router.push()
+                this.$router.push({path:'/'})
             },
-            editAndSave(){
-                let that = this
+            edit(){
                 if(this.value==true){
                     this.value = false;
-                    this.content = 'Save'
-                }else{
+                }
+            },
+            Save(){
+                let that = this
                     let payload={
                         customerId:'',
                         name:that.profile.name,
@@ -91,18 +95,16 @@ import axios from 'axios'
                     }
                     window.console.log(payload)
                     axios({
-                        url: '/backend/login/',
+                        url: '/backend/login/update',
                         method: 'post',
                         data: payload,
                         headers: {token:localStorage.getItem('user-token')}
                     })
                     .then(function(response){
                         that.value = true;
-                        that.content = 'Edit'
                         window.console.log(response)
                     })
                 }
-            }
         },
         created(){
             let that = this
@@ -121,6 +123,20 @@ import axios from 'axios'
                 that.profile.contactNo = response.data.data.contactNo
                 that.profile.address = response.data.data.address
             })
+        },
+        computed:{
+            validation(){
+                let phoneno = /^\d{10}$/
+                let phoneValidation = false;
+                if( this.profile.contactNo!=null && this.profile.contactNo.match(phoneno) && this.profile.address!=null){
+                    phoneValidation = true
+                }
+                if(phoneValidation == true){
+                    return false
+                }else{
+                    return true
+                }
+            }
         }
     }
 </script>

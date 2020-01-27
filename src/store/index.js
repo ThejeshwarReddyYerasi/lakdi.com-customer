@@ -38,7 +38,7 @@ export default new Vuex.Store({
       // window.console.log("in state")
       axios.get('/backend/product/getCategories')
       .then(function(response){
-        window.console.log(response.data);
+        // window.console.log(response.data);
         state.categoryListObject = response.data;
         // window.console.log(state.categoryListObject.data)
       }).catch(function(err){

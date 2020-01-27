@@ -77,6 +77,7 @@ import axios from 'axios'
                 this.$router.push({path:'/'})
             },
             sendLocalStorageData(){
+                let that = this
                 if(localStorage.getItem('cartDtoList')!=null){
                     let payload={
                         customerId: '',
@@ -98,15 +99,20 @@ import axios from 'axios'
                         data: payload,
                         headers: {token:localStorage.getItem('user-token')}
                     }).then(function(response){
-                        localStorage.removeItem('cartDtoList')
+                        if(response.data.success==true){
+                            localStorage.removeItem('cartDtoList')
+                            that.send();
+                        }
                         window.console.log(response)
                     })
                     .catch(function(error){
                         window.console.log(error)
                     })
+                }else{
+                    that.send()
                 }
             },
-            createUser(tok){
+            createUser(token){
                 let that = this
                 let payload={
                     customerId:'',
@@ -120,19 +126,24 @@ import axios from 'axios'
                     url:'/backend/login/',
                     method: 'post',
                     data: payload,
-                    headers:{ token: tok }
+                    headers:{ token: token }
                 }).then(function(response){
-                    that.sendLocalStorageData()
+                    if(response.data.success==true){
+                        localStorage.setItem('user-token',token)
+                        that.sendLocalStorageData()
+                    }else{
+                        window.console.log("error login")
+                    }
                     window.console.log(response)
                 })
             },
             getTokenFirebase(){
                 let that = this;
                 auth.currentUser.getIdTokenResult(true).then(function(token){
-                    localStorage.setItem('user-token',token.token);
+                    // localStorage.setItem('user-token',token.token);
                     window.console.log(token.token);
-                    that.createUser(localStorage.getItem('user-token'));
-                    that.send(); 
+                    that.createUser(token.token);
+                    // that.send();
                 }); 
             },
             invert(){

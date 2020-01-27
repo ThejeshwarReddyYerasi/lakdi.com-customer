@@ -2,6 +2,14 @@
     <div>
         <v-container>
             <v-row>
+                <v-snackbar :top="true" color="#F44336"
+                :multi-line="true"
+                  v-model="snackbar"
+                  :timeout="2000">
+                    <span style="color:white;font-size:30px">{{string}}</span>
+                </v-snackbar>
+            </v-row>
+            <v-row>
                 <v-col lg="10">
                     <p>Shopping Cart</p>
                 </v-col>
@@ -30,11 +38,12 @@
                                     class="textOfCard"
                                    >Quantity:</span>
                                    <select v-model="item.quantityBrought" class="classic">
-                                       <option v-for="(item,n) in items" 
+                                       <option v-for="(item,n) in items" :disabled="validation"
                                        :key="n">
                                             <div>{{item}}</div>
                                        </option>
                                    </select>
+                                   <!-- <p v-else>{{item.quantityBrought}}</p> -->
                                 </div>
                                 <p class="textOfCard" style="margin-top:20px">Total:{{item.productPrice * item.quantityBrought}}</p>
                                 <div style="margin-top:30px">
@@ -71,12 +80,14 @@ import axios from 'axios'
                 quantity:'2',
                 orders:{},
                 length:'',
-                subTotalVariable: ''
+                subTotalVariable: '',
+                snackbar:'',
+                string:''
             }
         },
         methods:{
             checkout(){
-                // let that = this
+                let that = this
                 if(localStorage.getItem('user-token')==null){
                     this.$router.push({path:'/login'})
                 }else{
@@ -101,7 +112,12 @@ import axios from 'axios'
                         headers: {token:localStorage.getItem('user-token')}
 
                     }).then(function(response){
-                        window.console.log(response)
+                        if(response.data.success==true){
+                            that.$router.push({path:'/orders'})
+                        }else{
+                            that.string = 'checkout failed'
+                            that.snackbar = true
+                        }
                     })
                     .catch(function(error){
                         window.console.log(error)
@@ -189,6 +205,13 @@ import axios from 'axios'
         computed:{
             check(){
                 if(this.orders.data.length>0){
+                    return true
+                }else{
+                    return false
+                }
+            },
+            validation(){
+                if(localStorage.getItem('user-token')==null){
                     return true
                 }else{
                     return false

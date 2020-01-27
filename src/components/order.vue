@@ -87,7 +87,7 @@ export default {
             }
         })
         .then(function(response){
-            window.console.log(response)
+            window.console.log(response.data)
             that.orders = response.data;
             if(that.orders.data.length>0){
                 that.getOrderDetails(that.orders.data[0].orderId);
