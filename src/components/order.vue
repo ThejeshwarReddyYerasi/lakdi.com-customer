@@ -52,7 +52,10 @@
                             </v-row>
                             <v-row>
                                 <v-col>
-                                    <v-btn @click="submitReview(item.productId,item.orderId)">Submit</v-btn>
+                                    <v-btn @click="submitReview(item.productId,item.orderId)"
+                                        color="#D85430"
+                                        style="color:white"
+                                    >Submit</v-btn>
                                 </v-col>
                             </v-row>
                         <v-divider></v-divider>

@@ -1,19 +1,21 @@
 <template>
-    <div>
+    <div style="height:800px">
         <v-row>
-            <v-col style="background-color:#F5F5F5;text-align:center;margin-top:25px;margin-bottom:25px">
+            <v-col style="background-color:#D3D3D3;text-align:center;margin-top:25px;margin-bottom:25px">
                 {{productDetails.productName}}
             </v-col>
         </v-row>
         <v-row align="center" >
             <v-col lg="6" class="center">
-                <v-img style="margin:auto"
-                :src="productDetails.imageUrl"
-                max-height="400"
-                max-width="450"
-                :contain="true"
-                >         
-                </v-img>
+                <v-card style="height:400px;width:450px;margin:auto">
+                    <v-img 
+                    :src="productDetails.imageUrl"
+                    max-height="400"
+                    max-width="450"
+                    :contain="true"
+                    >         
+                    </v-img>
+                </v-card>
             </v-col>
             <v-col lg="6">
                 <v-row>
@@ -62,7 +64,7 @@
         </v-row>
         <v-row>
             <v-col lg="10">
-                <p style="padding-bottom:5px">Customer Reviews:</p>
+                <p style="padding-bottom:5px;padding-left:10px">Customer Reviews:</p>
                 <v-card style="display:inline-block;width:400px;margin:10px;border: 1px solid black;padding:5px"
                     v-for="(item,n) in reviewDetails" :key="n"
                 >

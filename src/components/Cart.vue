@@ -63,7 +63,7 @@
             <v-row style="margin-bottom:30px">
                 <v-col lg="10"></v-col> 
                 <v-col>
-                    <v-btn @click="checkout" style="background-color:#F2CC5E">
+                    <v-btn @click="checkout" style="background-color:#F2CC5E" :disabled="orders.data.length==0">
                         Checkout                    
                     </v-btn>
                 </v-col>
