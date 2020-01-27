@@ -38,7 +38,7 @@
                                     class="textOfCard"
                                    >Quantity:</span>
                                    <select v-model="item.quantityBrought" class="classic">
-                                       <option v-for="(item,n) in items" :disabled="validation"
+                                       <option v-for="(item,n) in items" :disabled="validation" 
                                        :key="n">
                                             <div>{{item}}</div>
                                        </option>
@@ -125,14 +125,19 @@ import axios from 'axios'
                 }
             },
             subTotal(){
-                window.console.log("subtotal")
-                let sum = 0;
-                for(let i=0;i<this.length;i++){
-                    sum = sum + this.orders.data[i].productPrice*this.orders.data[i].quantityBrought;
+                if(this.orders.data.length==0){
+                    this.subTotalVariable = 0
+                }else{
+                    window.console.log("subtotal")
+                    let sum = 0;
+                    for(let i=0;i<this.length;i++){
+                        sum = sum + this.orders.data[i].productPrice*this.orders.data[i].quantityBrought;
+                    }
+                    this.subTotalVariable = sum;
                 }
-                this.subTotalVariable = sum;
             },
             removeProduct(productId,merchantId){
+                let that  = this
                 if(localStorage.getItem('user-token')==null){
                     let cartDtoList = JSON.parse(localStorage.getItem('cartDtoList'));
                     if(localStorage.getItem('user-token')==null){
@@ -167,6 +172,15 @@ import axios from 'axios'
                         headers: {token:localStorage.getItem('user-token')}
                     })
                     .then(function(response){
+                        if(response.data.success==true){
+                            for(let i=0;i<that.orders.data.length;i++){
+                                if(that.orders.data[i].productId==productId){
+                                    that.orders.data.splice(i,1);
+                                    that.length = that.orders.data.length;
+                                    that.subTotal();
+                                }
+                            }
+                        }
                         window.console.log(response)
                     })
                 }
@@ -217,7 +231,7 @@ import axios from 'axios'
                     return false
                 }
             }
-        }
+        },
     }
 </script>
 <style scoped>
