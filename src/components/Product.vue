@@ -106,20 +106,21 @@ import axios from 'axios'
         },
         methods:{
             getFromsSearch(){
+                let that = this
                 axios.get(`/backend/search/get/${this.$route.params.productId}`)
                 .then(function(response){
-                this.productDetails.productId = response.data.data.product.productId
-                this.productDetails.productName =  response.data.data.product.productName
-                this.productDetails.categoryId =  response.data.data.product.categoryId
-                this.productDetails.imageUrl =  response.data.data.product.imageUrl
-                this.productDetails.productAttributes =  response.data.data.product.productAttributes
-                this.productDetails.productPrice =  response.data.data.product.productPrice
-                this.productDetails.productRating =  response.data.data.product.productRating
-                this.productDetails.productDescription =  response.data.data.product.productDescription
+                that.productDetails.productId = response.data.data.product.productId
+                that.productDetails.productName =  response.data.data.product.productName
+                that.productDetails.categoryId =  response.data.data.product.categoryId
+                that.productDetails.imageUrl =  response.data.data.product.imageUrl
+                that.productDetails.productAttributes =  response.data.data.product.productAttributes
+                that.productDetails.productPrice =  response.data.data.product.productPrice
+                that.productDetails.productRating =  response.data.data.product.productRating
+                that.productDetails.productDescription =  response.data.data.product.productDescription
 
-                this.merchantList = response.data.data.merchantList
+                that.merchantList = response.data.data.merchantList
 
-                    window.console.log(this.productDetails)
+                    window.console.log(that.productDetails)
                     // that.productDetails = response.data
             })
             },
@@ -174,27 +175,29 @@ import axios from 'axios'
         },
         created(){
             let that = this;
-            axios.get(`/backend/product/getProductDetails/${this.$route.params.productId}`)
-            .then(function(response){
-                that.productDetails.productId = response.data.data.product.productId
-                that.productDetails.productName =  response.data.data.product.productName
-                that.productDetails.categoryId =  response.data.data.product.categoryId
-                that.productDetails.imageUrl =  response.data.data.product.imageUrl
-                that.productDetails.productAttributes =  response.data.data.product.productAttributes
-                that.productDetails.productPrice =  response.data.data.product.productPrice
-                that.productDetails.productRating =  response.data.data.product.productRating
-                that.productDetails.productDescription =  response.data.data.product.productDescription
+            this.getFromsSearch()
+            
+            // axios.get(`/backend/product/getProductDetails/${this.$route.params.productId}`)
+            // .then(function(response){
+            //     that.productDetails.productId = response.data.data.product.productId
+            //     that.productDetails.productName =  response.data.data.product.productName
+            //     that.productDetails.categoryId =  response.data.data.product.categoryId
+            //     that.productDetails.imageUrl =  response.data.data.product.imageUrl
+            //     that.productDetails.productAttributes =  response.data.data.product.productAttributes
+            //     that.productDetails.productPrice =  response.data.data.product.productPrice
+            //     that.productDetails.productRating =  response.data.data.product.productRating
+            //     that.productDetails.productDescription =  response.data.data.product.productDescription
 
-                that.merchantList = response.data.data.merchantList
-                window.console.log(that.productDetails)
+            //     that.merchantList = response.data.data.merchantList
+            //     window.console.log(that.productDetails)
 
-                if(response.data.success==false){
-                    that.getFromsSearch();
-                }
-            }).catch(function(err){
-                that.getFromsSearch();
-                window.console.log(err);
-            })
+            //     if(response.data.success==false){
+            //         that.getFromsSearch();
+            //     }
+            // }).catch(function(err){
+            //     that.getFromsSearch();
+            //     window.console.log(err);
+            // })
             axios.get(`/backend/review/get/${this.$route.params.productId}`)
             .then(function(response){
                 that.reviewDetails = response.data.data
